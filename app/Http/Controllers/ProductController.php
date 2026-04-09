@@ -8,9 +8,6 @@ use Inertia\Response;
 
 class ProductController extends Controller
 {
-    /**
-     * Return a single product (e.g. for a product detail modal/page).
-     */
     public function show(Product $product): Response
     {
         abort_if(! $product->is_active, 404);

@@ -1,24 +1,64 @@
 import { shopping, welcome } from '@/routes';
-import { Link } from '@inertiajs/react';
+import { useShoppingStore } from '@/stores/shoppingStore';
+import { Link, usePage } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
+    const { cartItems, setCartOpen } = useShoppingStore();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    const totalItems = cartItems.length
+    const count = mounted ? totalItems : 0;
+    const { url } = usePage();
+    const hiddenRoutes = ['/shopping', '/checkout', '/product'];
+
+    const showCart = !hiddenRoutes.some(
+        (path) => url === path || url.startsWith(path + '/'),
+    );
+
     return (
-        <nav className="border-2 flex items-center border-md-outline font-semibold sticky top-0 bg-md-background h-16 z-50">
-            <div className="inline mx-4 my-2">
+        <nav className="sticky top-0 z-50 flex h-16 items-center border-b-2 border-md-outline bg-md-background font-semibold">
+            <div className="mx-4 my-2 inline">
                 <a href={welcome().url}>
-                <img src="/logo_cropped.png" className="w-8"/>
+                    <img src="/logo_cropped.png" className="w-8" alt="Logo" />
                 </a>
             </div>
-            <div className="self-stretch border-l-2 border-md-outline"></div>
+            <div className="self-stretch border-l-2 border-md-outline" />
 
-            <div className="space-x-12 mx-8">
-                <Link href={welcome()} className='text-md-on-primary-container'>Trang chủ</Link>
-                <Link href={`${welcome().url}#about`} className='text-md-on-primary-container'>Về chúng tôi</Link>
-                <Link href={shopping()} className='text-md-on-primary-container'>Mua hàng</Link>
+            <div className="mx-8 space-x-12">
+                <Link href={welcome()} className="text-md-on-primary-container">
+                    Trang chủ
+                </Link>
+                <Link
+                    href={`${welcome().url}#about`}
+                    className="text-md-on-primary-container"
+                >
+                    Về chúng tôi
+                </Link>
+                <Link
+                    href={shopping()}
+                    className="text-md-on-primary-container"
+                >
+                    Mua hàng
+                </Link>
             </div>
-            <ShoppingCart className='ml-auto mr-8' color='#001A41' />
+
+            {/* Cart icon with badge */}
+            {showCart && (
+                <button
+                    onClick={() => setCartOpen(true)}
+                    className="relative mr-8 ml-auto rounded-full p-2 transition-colors hover:bg-md-surface-container"
+                    aria-label="Mở giỏ hàng"
+                >
+                    <ShoppingCart className="h-5 w-5" color="#001A41" />
+                    {count > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-md-error text-[10px] font-bold text-md-on-error">
+                            {count > 99 ? '99+' : count}
+                        </span>
+                    )}
+                </button>
+            )}
         </nav>
     );
 }
