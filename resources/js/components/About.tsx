@@ -11,7 +11,8 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
-                className="my-8 text-5xl lg:text-7xl font-extrabold text-md-on-primary-fixed-variant"
+                className="my-8 text-5xl lg:text-7xl font-extrabold text-md-on-primary-fixed-variant scroll-mt-32"
+                id='about'
             >
                 Về chúng tôi
             </motion.h1>
@@ -43,7 +44,7 @@ export default function About() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: 0.3 }}
-                    className="w-full max-h-[400px] object-contain rounded-2xl"
+                    className="w-full max-h-100 object-contain rounded-2xl"
                 />
             </div>
 
@@ -120,7 +121,7 @@ export default function About() {
                             className="h-32 object-contain mb-4"
                         />
 
-                        <h3 className="text-md-on-background text-lg font-semibold min-h-[48px]">
+                        <h3 className="text-md-on-background text-lg font-semibold min-h-12">
                             {item.title}
                         </h3>
 

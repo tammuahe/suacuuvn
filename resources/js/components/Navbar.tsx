@@ -1,4 +1,4 @@
-import { welcome } from '@/routes';
+import { shopping, welcome } from '@/routes';
 import { Link } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
 import React from 'react';
@@ -16,7 +16,7 @@ export default function Navbar() {
             <div className="space-x-12 mx-8">
                 <Link href={welcome()} className='text-md-on-primary-container'>Trang chủ</Link>
                 <Link href={`${welcome().url}#about`} className='text-md-on-primary-container'>Về chúng tôi</Link>
-                <Link href="/shopping" className='text-md-on-primary-container'>Mua hàng</Link>
+                <Link href={shopping()} className='text-md-on-primary-container'>Mua hàng</Link>
             </div>
             <ShoppingCart className='ml-auto mr-8' color='#001A41' />
         </nav>
