@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
 import { Minus, Plus, Trash2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 
 interface Props {
     quantity: number;
@@ -26,6 +26,7 @@ export default function QuantityStepper({
 
     const commit = (raw: string) => {
         const parsed = parseInt(raw, 10);
+
         if (!isNaN(parsed) && parsed > 0) {
             onChangeQuantity(parsed);
             setDraft(String(parsed));
@@ -76,10 +77,12 @@ export default function QuantityStepper({
                         if (e.key === 'Enter') {
                             inputRef.current?.blur();
                         }
+
                         if (e.key === 'ArrowUp') {
                             e.preventDefault();
                             onChangeQuantity(quantity + 1);
                         }
+
                         if (e.key === 'ArrowDown') {
                             e.preventDefault();
                             onChangeQuantity(Math.max(1, quantity - 1));

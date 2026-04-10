@@ -1,8 +1,8 @@
-import { useShoppingStore } from '@/stores/shoppingStore';
 import { router } from '@inertiajs/react';
 import { X, ShoppingCart } from 'lucide-react';
 import QuantityStepper from '@/components/QuantityStepper';
-import { CartItem } from '@/stores/shoppingStore';
+import { useShoppingStore } from '@/stores/shoppingStore';
+import type { CartItem } from '@/stores/shoppingStore';
 
 function formatVND(amount: number): string {
     return new Intl.NumberFormat('vi-VN', {

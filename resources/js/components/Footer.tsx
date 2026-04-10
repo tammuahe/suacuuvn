@@ -1,8 +1,7 @@
 import { FaFacebookF } from 'react-icons/fa';
 import { FaPhone } from 'react-icons/fa';
-import { IoIosMail } from 'react-icons/io';
 import { FaTiktok } from 'react-icons/fa';
-import { FaYoutube } from 'react-icons/fa';
+import { IoIosMail } from 'react-icons/io';
 import { SiZalo } from 'react-icons/si';
 import { welcome } from '@/routes';
 

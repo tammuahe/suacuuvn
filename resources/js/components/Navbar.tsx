@@ -1,14 +1,20 @@
-import { shopping, welcome } from '@/routes';
-import { useShoppingStore } from '@/stores/shoppingStore';
 import { Link, usePage } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { shopping, welcome } from '@/routes';
+import { useShoppingStore } from '@/stores/shoppingStore';
 
 export default function Navbar() {
     const { cartItems, setCartOpen } = useShoppingStore();
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
-    const totalItems = cartItems.length
+    const mounted = useRef(false);
+    useEffect(() => {
+        mounted.current = true;
+
+        return () => {
+            mounted.current = false;
+        };
+    }, []);
+    const totalItems = cartItems.length;
     const count = mounted ? totalItems : 0;
     const { url } = usePage();
     const hiddenRoutes = ['/shopping', '/checkout', '/product'];

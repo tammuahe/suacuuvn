@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import { CarouselCard } from './CarouselCard';
 import AutoScroll from 'embla-carousel-auto-scroll';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useState } from 'react';
+import { CarouselCard } from './CarouselCard';
 
 export function Carousel() {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
         AutoScroll({ stopOnInteraction: true, speed: 1 }),
     ]);
-    const scrollPrev = () => emblaApi?.scrollPrev();
-    const scrollNext = () => emblaApi?.scrollNext();
-    const [products, setProducts] = useState([
+    const [products] = useState([
         {
             id: 1,
             name: 'Sữa Cừu Organic Thuần Khiết Dinh Dưỡng Đặc Biệt 350g (SURE GOLD)',
@@ -58,6 +56,7 @@ export function Carousel() {
             emblaApi.plugins().autoScroll.play();
         }, 2000);
     });
+
     return (
         <div className="embla w-full">
             <div className="p-2 overflow-x-hidden" ref={emblaRef}>

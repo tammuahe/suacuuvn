@@ -1,6 +1,6 @@
-import ProductCard from '@/components/ProductCard';
 import CartDrawer from '@/components/CartDrawer';
-import { Product } from '@/stores/shoppingStore';
+import ProductCard from '@/components/ProductCard';
+import type { Product } from '@/stores/shoppingStore';
 
 interface Props {
     products: Product[];

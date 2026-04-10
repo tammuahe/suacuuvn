@@ -1,11 +1,12 @@
-import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { ShoppingCart, ChevronLeft } from 'lucide-react';
-import { Product, useShoppingStore } from '@/stores/shoppingStore';
-import QuantityStepper from '@/components/QuantityStepper';
+import { useState } from 'react';
 import CartDrawer from '@/components/CartDrawer';
 import { formatVND } from '@/components/ProductCard';
+import QuantityStepper from '@/components/QuantityStepper';
 import { shopping } from '@/routes';
+import { useShoppingStore } from '@/stores/shoppingStore';
+import type { Product} from '@/stores/shoppingStore';
 
 interface Props {
     product: Product & { description?: string };

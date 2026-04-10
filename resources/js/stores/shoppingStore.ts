@@ -44,15 +44,20 @@ export const useShoppingStore = create<CartState>()(
                 if (existing) {
                     if (newQuantity <= 0) {
                         set({ cartItems: items.filter((i) => i.id !== product.id) });
+
                         return;
                     }
+
                     set({
                         cartItems: items.map((i) =>
                             i.id === product.id ? { ...i, quantity: newQuantity } : i,
                         ),
                     });
                 } else {
-                    if (newQuantity <= 0) return;
+                    if (newQuantity <= 0) {
+return;
+}
+
                     set({
                         cartItems: [
                             ...items,
