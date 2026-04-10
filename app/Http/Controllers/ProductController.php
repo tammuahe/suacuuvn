@@ -14,7 +14,7 @@ class ProductController extends Controller
 
         return Inertia::render('shopping/ProductDetail', [
             'product' => $product->only([
-                'id', 'name', 'slug', 'description',
+                'id', 'name', 'slug', 'description', 'detailed_description',
                 'price', 'discount', 'image_url', 'discounted_price',
             ]),
         ]);

@@ -1,25 +1,22 @@
 import { Link, usePage } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { shopping, welcome } from '@/routes';
 import { useShoppingStore } from '@/stores/shoppingStore';
 
 export default function Navbar() {
     const { cartItems, setCartOpen } = useShoppingStore();
-    const mounted = useRef(false);
+    const [mounted, setMounted] = useState(false);
     useEffect(() => {
-        mounted.current = true;
-
-        return () => {
-            mounted.current = false;
-        };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true)
     }, []);
     const totalItems = cartItems.length;
     const count = mounted ? totalItems : 0;
     const { url } = usePage();
-    const hiddenRoutes = ['/shopping', '/checkout', '/product'];
+    const showingRoutes = ['/products', '/checkout', '/product'];
 
-    const showCart = !hiddenRoutes.some(
+    const showCart = showingRoutes.some(
         (path) => url === path || url.startsWith(path + '/'),
     );
 
