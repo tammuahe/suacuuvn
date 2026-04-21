@@ -12,13 +12,13 @@ interface Props {
 const TRUST_ITEMS = [
     {
         icon: <GiSheep size={28} color="rgb(71 93 146)" />,
-        title: 'Sữa cừu hữu cơ',
-        body: 'Nguồn gốc tự nhiên, không chất bảo quản',
+        title: 'Sữa cừu nhập khẩu',
+        body: 'Dinh dưỡng vượt trội, hỗ trợ hệ tiêu hóa',
     },
     {
         icon: <CiDeliveryTruck size={28} color="rgb(71 93 146)" />,
         title: 'Giao hàng toàn quốc',
-        body: 'Đóng gói kỹ lưỡng, giao nhanh 2–4 ngày',
+        body: 'Đóng gói kỹ lưỡng, giao nhanh 2-4 ngày',
     },
     {
         icon: <RiCustomerService2Fill size={28} color="rgb(71 93 146)" />,
@@ -56,7 +56,6 @@ export default function Shopping({ products }: Props) {
                 <div className="mb-6 flex items-center gap-4">
                     <h2 className="shrink-0 text-lg font-bold text-md-on-surface">Sản phẩm</h2>
                     <div className="h-px flex-1 bg-md-outline-variant" />
-                    <span className="shrink-0 text-sm text-md-on-surface-variant">{products.length} sản phẩm</span>
                 </div>
 
                 {/* Product grid */}

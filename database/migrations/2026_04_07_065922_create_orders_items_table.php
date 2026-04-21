@@ -18,9 +18,6 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-
-            $table->string('product_name');
-            $table->string('product_sku')->nullable();
             $table->decimal('unit_price', 10, 2);
             $table->unsignedInteger('quantity');
             $table->decimal('subtotal', 10, 2);

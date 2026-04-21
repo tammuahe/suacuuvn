@@ -15,6 +15,7 @@ class ProductSeeder extends Seeder
                 'name' => 'Sữa Cừu Organic Thuần Khiết Dinh Dưỡng Đặc Biệt 350g (SURE GOLD)',
                 'price' => 750000,
                 'discount' => 0.24,
+                'sku' => 'SUREGOLD350',
                 'image_url' => 'https://aaipharma.vn/wp-content/uploads/2024/12/Sure-gold-400x400.png',
                 'description' => 'Sữa Cừu Organic Thuần Khiết Dinh Dưỡng Đặc Biệt (SURE GOLD) với nguyên liệu Sữa cừu nhập khẩu New Zealand. Với ưu điểm là hàm lượng dưỡng chất vượt trội hơn hẳn so với sữa bò, giàu Canxi, Phospho, cùng hàm lượng Đạm A2 cao. Sữa cừu Organic Sure Gold đặc biệt phù hợp với những người muốn bổ sung dưỡng chất, bồi bổ cơ thể, tốt cho hệ tiêu hóa và chuyển hóa. Sản phẩm có mùi thơm ngậy đặc trưng của sữa cừu, vị ngọt dịu, dễ uống.',
                 'detailed_description' => "SỮA CỪU ORGANIC SURE GOLD – DINH DƯỠNG TOÀN DIỆN CHO CẢ GIA ĐÌNH\nTinh túy từ nguồn sữa cừu hữu cơ New Zealand – vùng đất nổi tiếng với đàn cừu được chăn thả tự nhiên 100%, ăn cỏ sạch quanh năm, không hormone, không kháng sinh, mang đến nguồn sữa tinh khiết và an toàn tuyệt đối.\n\nLà “siêu thực phẩm tự nhiên”, sữa cừu Sure Gold chứa hàm lượng đạm, canxi, photpho và vitamin thiết yếu cao, cung cấp năng lượng và dưỡng chất toàn diện cho mọi lứa tuổi.\n\n💠 Đạm A2 tự nhiên – dễ hấp thu, giảm gánh nặng tiêu hóa, phù hợp cho người lớn tuổi, trẻ nhỏ, người có hệ tiêu hóa nhạy cảm.\n💠 Hàm lượng Canxi, Phospho, Lysine cao – hỗ trợ phát triển chiều cao, xương răng chắc khỏe, hạn chế loãng xương.\n💠 Dinh dưỡng đậm đặc, năng lượng cao – lý tưởng cho người cần tăng cân, phục hồi thể trạng, phụ nữ sau sinh.\n💠 Giàu Vitamin A, D, Kẽm – tăng đề kháng, nâng cao miễn dịch.\n💠 Chống oxy hóa tự nhiên (CLA & peptide sinh học) – bảo vệ tim mạch, giảm viêm, chống lão hóa.\n\n“Một sản phẩm – nhiều lợi ích sức khỏe – tiện dụng cho cả gia đình”\n\nLỢI ÍCH ĐẾN TỪ SỮA CỪU ORGANIC SURE GOLD\n\nBổ sung dinh dưỡng & tăng cường sức khỏe\nNâng cao hệ miễn dịch, tăng cường sức đề kháng\nHỗ trợ sức khỏe đường ruột, nhẹ tiêu hóa.\nDuy trì sức khỏe tim mạch và xương khớp",
@@ -23,6 +24,7 @@ class ProductSeeder extends Seeder
                 'name' => 'Sữa Cừu Organic Thuần Khiết Dinh Dưỡng Đặc Biệt 650g (SURE GOLD)',
                 'price' => 1250000,
                 'discount' => 0.21,
+                'sku' => 'SUREGOLD650',
                 'image_url' => 'https://aaipharma.vn/wp-content/uploads/2024/12/Loi-ich-sure-gold-510x510.png',
                 'description' => 'Sữa Cừu Organic Thuần Khiết Dinh Dưỡng Đặc Biệt (SURE GOLD) với nguyên liệu Sữa cừu nhập khẩu New Zealand. Với ưu điểm là hàm lượng dưỡng chất vượt trội hơn hẳn so với sữa bò, giàu Canxi, Phospho, cùng hàm lượng Đạm A2 cao. Sữa cừu Organic Sure Gold đặc biệt phù hợp với những người muốn bổ sung dưỡng chất, bồi bổ cơ thể, tốt cho hệ tiêu hóa và chuyển hóa. Sản phẩm có mùi thơm ngậy đặc trưng của sữa cừu, vị ngọt dịu, dễ uống.',
                 'detailed_description' => "SỮA CỪU ORGANIC SURE GOLD – DINH DƯỠNG TOÀN DIỆN CHO CẢ GIA ĐÌNH\n".
@@ -44,6 +46,7 @@ class ProductSeeder extends Seeder
                 'name' => 'Sữa Cừu Organic Thuần Khiết Tiểu Đường, Tim Mạch 350g (DIABETES)',
                 'price' => 750000,
                 'discount' => 0.24,
+                'sku' => 'DIABETES350',
                 'image_url' => 'https://aaipharma.vn/wp-content/uploads/2024/10/Sua-cuu-diabetes-510x510.png',
                 'description' => 'Sữa Cừu Organic Tiểu Đường, Tim Mạch (DIABETES) giúp hỗ trợ cân bằng đường huyết và cải thiện sức khỏe tim mạch. Sản phẩm với nguyên liệu là sữa cừu hữu cơ giàu đạm A2 dễ tiêu hóa, tốt cho người tiểu đường và tim mạch. Giảm nguy cơ biến chứng và duy trì sức khỏe toàn diện.',
                 'detailed_description' => "SỮA CỪU ORGANIC DIABETES – DINH DƯỠNG CHUYÊN BIỆT CHO NGƯỜI TIỂU ĐƯỜNG, TIM MẠCH\n\n".
@@ -67,6 +70,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Sữa Cừu Organic Thuần Khiết Tiểu Đường, Tim Mạch 650g (DIABETES)',
                 'price' => 1250000,
+                'sku' => 'DIABETES650',
                 'discount' => 0.21,
                 'image_url' => 'https://aaipharma.vn/wp-content/uploads/2024/10/Sua-cuu-diabetes-510x510.png',
                 'description' => 'Sữa Cừu Organic Tiểu Đường, Tim Mạch (DIABETES) giúp hỗ trợ cân bằng đường huyết và cải thiện sức khỏe tim mạch. Sản phẩm với nguyên liệu là sữa cừu hữu cơ giàu đạm A2 dễ tiêu hóa, tốt cho người tiểu đường và tim mạch. Giảm nguy cơ biến chứng và duy trì sức khỏe toàn diện.',
@@ -92,6 +96,7 @@ class ProductSeeder extends Seeder
                 'name' => 'Sữa Cừu Organic Xương Khớp 350g (Canxi)',
                 'price' => 750000,
                 'discount' => 0.24,
+                'sku' => 'CANXI350',
                 'image_url' => 'https://aaipharma.vn/wp-content/uploads/2025/11/z7355642459730_fb72a5dc41d9eaadee2aad1d7707f8dd-510x510.jpg',
                 'description' => 'Sữa Cừu Organic Xương Khớp – nguyên liệu nhập khẩu New Zealand, giàu canxi sinh học tự nhiên và Vitamin D, hỗ trợ xương khớp khỏe mạnh, phát triển chiều cao và dễ tiêu hóa. Sản phẩm có mùi thơm ngậy đặc trưng của sữa cừu, vị ngọt dịu, dễ uống.',
                 'detailed_description' => "SỮA CỪU ORGANIC CALCI XƯƠNG KHỚP – KHỎE TỪ GỐC, DẺO DAI MỖI NGÀY\n\n".
@@ -114,6 +119,7 @@ class ProductSeeder extends Seeder
                 'name' => 'Sữa Cừu Organic Xương Khớp 650g (Canxi)',
                 'price' => 1250000,
                 'discount' => 0.21,
+                'sku' => 'CANXI650',
                 'image_url' => 'https://aaipharma.vn/wp-content/uploads/2025/05/canxi-650g-1-510x510.png',
                 'description' => 'Sữa Cừu Organic Xương Khớp – nguyên liệu nhập khẩu New Zealand, giàu canxi sinh học tự nhiên và Vitamin D, hỗ trợ xương khớp khỏe mạnh, phát triển chiều cao và dễ tiêu hóa.',
                 'detailed_description' => "SỮA CỪU ORGANIC CANXI XƯƠNG KHỚP – KHỎE TỪ GỐC, DẺO DAI MỖI NGÀY\n\n".

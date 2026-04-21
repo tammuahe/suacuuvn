@@ -8,5 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'show'])->name('welcome');
 Route::get('/products', [ShoppingController::class, 'show'])->name('shopping');
-Route::get('/orders/{reference}/confirmation', [OrderController::class, 'confirmation'])->name('orders.confirmation');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('shopping.product');
+Route::get('/checkout', [ShoppingController::class, 'checkout'])->name('checkout');
+Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.submit');
+Route::get('/checkout/sucess', [ShoppingController::class, 'success'])->name('checkout.success');
