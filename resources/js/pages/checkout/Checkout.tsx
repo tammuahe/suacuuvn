@@ -16,26 +16,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import InputField from '@/components/InputField';
 import { shopping } from '@/routes';
 import checkout from '@/routes/checkout';
+import { useAddressStore } from '@/stores/addressStore';
+import type { District, Ward } from '@/stores/addressStore';
 import { useShoppingStore } from '@/stores/shoppingStore';
-
-interface Ward {
-    name: string;
-    code: number;
-    district_code: number;
-}
-
-interface District {
-    name: string;
-    code: number;
-    province_code: number;
-    wards: Ward[];
-}
-
-interface Province {
-    name: string;
-    code: number;
-    districts: District[];
-}
 
 interface SearchableSelectProps {
     label: string;
@@ -58,6 +41,7 @@ function SearchableSelect({
     error,
     required,
 }: SearchableSelectProps) {
+    //TODO: add tel standardization
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -66,27 +50,41 @@ function SearchableSelect({
     const selectedName = options.find((o) => o.code === value)?.name ?? '';
 
     const filtered = useMemo(() => {
-        if (!query.trim()) return options;
+        if (!query.trim()) {
+            return options;
+        }
+
         const q = query.toLowerCase();
+
         return options.filter((o) => o.name.toLowerCase().includes(q));
     }, [options, query]);
 
     // Close on outside click
     useEffect(() => {
-        if (!open) return;
+        if (!open) {
+            return;
+        }
+
         const handler = (e: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+            if (
+                containerRef.current &&
+                !containerRef.current.contains(e.target as Node)
+            ) {
                 setOpen(false);
                 setQuery('');
             }
         };
         document.addEventListener('mousedown', handler);
+
         return () => document.removeEventListener('mousedown', handler);
     }, [open]);
 
     // Close on Escape
     useEffect(() => {
-        if (!open) return;
+        if (!open) {
+            return;
+        }
+
         const handler = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
                 setOpen(false);
@@ -94,11 +92,15 @@ function SearchableSelect({
             }
         };
         document.addEventListener('keydown', handler);
+
         return () => document.removeEventListener('keydown', handler);
     }, [open]);
 
     const handleOpen = () => {
-        if (disabled) return;
+        if (disabled) {
+            return;
+        }
+
         setOpen(true);
         setQuery('');
         setTimeout(() => inputRef.current?.focus(), 0);
@@ -129,12 +131,12 @@ function SearchableSelect({
                 type="button"
                 onClick={handleOpen}
                 disabled={disabled}
-                className={`flex w-full items-center gap-2 rounded-2xl border-2 bg-md-surface-container-lowest px-4 py-3 text-left text-sm transition-colors
-                    ${error ? 'border-md-error' : open ? 'border-md-primary' : 'border-md-outline-variant'}
-                    ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer hover:border-md-outline'}`}
+                className={`flex w-full items-center gap-2 rounded-2xl border-2 bg-md-surface-container-lowest px-4 py-3 text-left text-sm transition-colors ${error ? 'border-md-error' : open ? 'border-md-primary' : 'border-md-outline-variant'} ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer hover:border-md-outline'}`}
             >
                 <MapPin className="h-4 w-4 shrink-0 text-md-on-surface-variant" />
-                <span className={`flex-1 truncate ${value ? 'text-md-on-surface' : 'text-md-on-surface-variant/50'}`}>
+                <span
+                    className={`flex-1 truncate ${value ? 'text-md-on-surface' : 'text-md-on-surface-variant/50'}`}
+                >
                     {value ? selectedName : placeholder}
                 </span>
                 {value && !disabled ? (
@@ -151,7 +153,7 @@ function SearchableSelect({
 
             {/* Dropdown */}
             {open && (
-                <div className="absolute z-50 mt-1.5 w-full overflow-hidden rounded-2xl bg-md-surface-container-low shadow-lg shadow-black/10 ring-1 ring-md-outline-variant/40">
+                <div className="absolute z-50 mt-1.5 w-full overflow-hidden rounded-2xl bg-md-surface-container-low shadow-lg ring-1 shadow-black/10 ring-md-outline-variant/40">
                     {/* Search input */}
                     <div className="flex items-center gap-2 border-b border-md-outline-variant/30 px-3 py-2.5">
                         <Search className="h-3.5 w-3.5 shrink-0 text-md-on-surface-variant" />
@@ -171,7 +173,10 @@ function SearchableSelect({
                     </div>
 
                     {/* Options list */}
-                    <ul className="max-h-52 overflow-y-auto py-1" role="listbox">
+                    <ul
+                        className="max-h-52 overflow-y-auto py-1"
+                        role="listbox"
+                    >
                         {filtered.length === 0 ? (
                             <li className="px-4 py-3 text-center text-xs text-md-on-surface-variant">
                                 Không tìm thấy kết quả
@@ -183,8 +188,7 @@ function SearchableSelect({
                                     role="option"
                                     aria-selected={opt.code === value}
                                     onClick={() => handleSelect(opt.code)}
-                                    className={`cursor-pointer px-4 py-2.5 text-sm transition-colors hover:bg-md-surface-container
-                                        ${opt.code === value ? 'bg-md-primary/10 font-semibold text-md-primary' : 'text-md-on-surface'}`}
+                                    className={`cursor-pointer px-4 py-2.5 text-sm transition-colors hover:bg-md-surface-container ${opt.code === value ? 'bg-md-primary/10 font-semibold text-md-primary' : 'text-md-on-surface'}`}
                                 >
                                     {opt.name}
                                 </li>
@@ -208,8 +212,7 @@ function formatVND(amount: number): string {
 
 export default function Checkout() {
     const { cartItems, clearCart } = useShoppingStore();
-    const [provinces, setProvinces] = useState<Province[]>([]);
-    const [loadingAddr, setLoadingAddr] = useState(true);
+    const { provinces, loading: loadingAddr } = useAddressStore();
     const [feesOpen, setFeesOpen] = useState(false);
 
     const { data, setData, post, processing, errors, transform } = useForm({
@@ -239,16 +242,11 @@ export default function Checkout() {
     }));
 
     const formErrors = errors as Record<string, string>;
-
-    useEffect(() => {
-        fetch('/addresses.json')
-            .then((r) => r.json())
-            .then((d: Province[]) => setProvinces(d))
-            .finally(() => setLoadingAddr(false));
-    }, []);
-
     const districts = useMemo<District[]>(() => {
-        if (!data.shipping_address.province_code) return [];
+        if (!data.shipping_address.province_code) {
+            return [];
+        }
+
         return (
             provinces.find(
                 (p) => p.code === Number(data.shipping_address.province_code),
@@ -257,7 +255,10 @@ export default function Checkout() {
     }, [provinces, data.shipping_address.province_code]);
 
     const wards = useMemo<Ward[]>(() => {
-        if (!data.shipping_address.district_code) return [];
+        if (!data.shipping_address.district_code) {
+            return [];
+        }
+
         return (
             districts.find(
                 (d) => d.code === Number(data.shipping_address.district_code),
@@ -348,7 +349,10 @@ export default function Checkout() {
                                         autoComplete="name"
                                         value={data.customer_name}
                                         onChange={(e) =>
-                                            setData('customer_name', e.target.value)
+                                            setData(
+                                                'customer_name',
+                                                e.target.value,
+                                            )
                                         }
                                         error={errors.customer_name}
                                     />
@@ -362,7 +366,10 @@ export default function Checkout() {
                                     autoComplete="tel"
                                     value={data.customer_phone}
                                     onChange={(e) =>
-                                        setData('customer_phone', e.target.value)
+                                        setData(
+                                            'customer_phone',
+                                            e.target.value,
+                                        )
                                     }
                                     error={errors.customer_phone}
                                 />
@@ -374,7 +381,10 @@ export default function Checkout() {
                                     autoComplete="email"
                                     value={data.customer_email}
                                     onChange={(e) =>
-                                        setData('customer_email', e.target.value)
+                                        setData(
+                                            'customer_email',
+                                            e.target.value,
+                                        )
                                     }
                                     error={errors.customer_email}
                                 />
@@ -399,7 +409,9 @@ export default function Checkout() {
                                         label="Tỉnh / Thành phố"
                                         placeholder="Chọn tỉnh / thành phố"
                                         required
-                                        value={data.shipping_address.province_code}
+                                        value={
+                                            data.shipping_address.province_code
+                                        }
                                         onChange={handleProvinceChange}
                                         options={provinces}
                                         error={
@@ -413,8 +425,12 @@ export default function Checkout() {
                                         label="Quận / Huyện"
                                         placeholder="Chọn quận / huyện"
                                         required
-                                        disabled={!data.shipping_address.province_code}
-                                        value={data.shipping_address.district_code}
+                                        disabled={
+                                            !data.shipping_address.province_code
+                                        }
+                                        value={
+                                            data.shipping_address.district_code
+                                        }
                                         onChange={handleDistrictChange}
                                         options={districts}
                                         error={
@@ -428,7 +444,9 @@ export default function Checkout() {
                                         label="Phường / Xã"
                                         placeholder="Chọn phường / xã"
                                         required
-                                        disabled={!data.shipping_address.district_code}
+                                        disabled={
+                                            !data.shipping_address.district_code
+                                        }
                                         value={data.shipping_address.ward_code}
                                         onChange={(code) =>
                                             setData('shipping_address', {
@@ -451,7 +469,9 @@ export default function Checkout() {
                                             required
                                             placeholder="123 Đường Láng"
                                             autoComplete="address-line1"
-                                            value={data.shipping_address.address}
+                                            value={
+                                                data.shipping_address.address
+                                            }
                                             onChange={(e) =>
                                                 setData('shipping_address', {
                                                     ...data.shipping_address,
@@ -487,7 +507,9 @@ export default function Checkout() {
                                     rows={3}
                                     placeholder="Ghi chú cho đơn hàng (tuỳ chọn)..."
                                     value={data.notes}
-                                    onChange={(e) => setData('notes', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('notes', e.target.value)
+                                    }
                                     className="flex-1 resize-none bg-transparent text-sm text-md-on-surface outline-none placeholder:text-md-on-surface-variant/50"
                                 />
                             </div>
@@ -504,7 +526,10 @@ export default function Checkout() {
                             {/* Cart items */}
                             <div className="space-y-3">
                                 {cartItems.map((item) => (
-                                    <div key={item.id} className="flex items-center gap-3">
+                                    <div
+                                        key={item.id}
+                                        className="flex items-center gap-3"
+                                    >
                                         <div className="relative h-14 w-14 shrink-0 rounded-xl bg-md-surface-container">
                                             <img
                                                 src={item.image_url}
@@ -516,12 +541,14 @@ export default function Checkout() {
                                             </span>
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <p className="line-clamp-2 text-xs font-medium leading-snug text-md-on-surface">
+                                            <p className="line-clamp-2 text-xs leading-snug font-medium text-md-on-surface">
                                                 {item.name}
                                             </p>
                                         </div>
                                         <p className="shrink-0 text-sm font-bold text-md-primary">
-                                            {formatVND(item.price * item.quantity)}
+                                            {formatVND(
+                                                item.price * item.quantity,
+                                            )}
                                         </p>
                                     </div>
                                 ))}
@@ -549,12 +576,16 @@ export default function Checkout() {
                                     <div className="flex justify-between text-xs text-md-on-surface-variant">
                                         <span>Phí vận chuyển</span>
                                         <span className="font-medium text-md-primary">
-                                            {shipping > 0 ? formatVND(shipping) : 'Miễn phí'}
+                                            {shipping > 0
+                                                ? formatVND(shipping)
+                                                : 'Miễn phí'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between text-xs text-md-on-surface-variant">
                                         <span>Thuế</span>
-                                        <span>{tax > 0 ? formatVND(tax) : '—'}</span>
+                                        <span>
+                                            {tax > 0 ? formatVND(tax) : '—'}
+                                        </span>
                                     </div>
                                 </div>
                             )}

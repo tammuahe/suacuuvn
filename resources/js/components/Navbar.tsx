@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { shopping, welcome } from '@/routes';
+import order from '@/routes/order';
 import { useShoppingStore } from '@/stores/shoppingStore';
 
 export default function Navbar() {
@@ -44,6 +45,12 @@ export default function Navbar() {
                     className="text-md-on-primary-container"
                 >
                     Mua hàng
+                </Link>
+                <Link
+                    href={order.lookup()}
+                    className="text-md-on-primary-container"
+                >
+                    Tra cứu
                 </Link>
             </div>
 

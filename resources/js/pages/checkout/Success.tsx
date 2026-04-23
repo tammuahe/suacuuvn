@@ -10,9 +10,9 @@ import {
     ShoppingBag,
     Clock,
 } from 'lucide-react';
+import InfoRow from '@/components/InfoRow';
 import { shopping } from '@/routes';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import orderRoute from '@/routes/order';
 
 interface Product {
     sku:string;
@@ -55,8 +55,6 @@ export interface Order {
 interface Props {
     order: Order;
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatVND(amount: string | number): string {
     return new Intl.NumberFormat('vi-VN', {
@@ -111,8 +109,6 @@ const STATUS_MAP: Record<
     },
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function Success({ order }: Props) {
     const status = STATUS_MAP[order.status] ?? STATUS_MAP.processing;
 
@@ -142,8 +138,7 @@ export default function Success({ order }: Props) {
                     Đặt hàng thành công!
                 </h1>
                 <p className="mt-2 text-sm text-md-on-surface-variant">
-                    Cảm ơn bạn đã tin tưởng. Chúng tôi sẽ liên hệ sớm để xác
-                    nhận đơn hàng.
+                    Cảm ơn bạn đã tin tưởng AAi Pharma.<br/>Vui lòng ghi lại mã đơn hàng dưới đây để có thể tra cứu tình trạng đơn hàng và yêu cầu hỗ trợ nếu cần thiết.
                 </p>
 
                 {/* Reference + status row */}
@@ -311,7 +306,9 @@ export default function Success({ order }: Props) {
                     </button>
                     <button
                         onClick={() =>
-                            router.visit(`/orders/${order.reference}`)
+                            router.get(orderRoute.lookup(),{
+                                orderRef: order.reference
+                            })
                         }
                         className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-md-surface-container px-5 py-3.5 text-sm font-semibold text-md-on-surface ring-1 ring-md-outline-variant/60 transition-all hover:bg-md-surface-container-high active:scale-95"
                     >
@@ -324,32 +321,5 @@ export default function Success({ order }: Props) {
     );
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
-function InfoRow({
-    icon: Icon,
-    label,
-    value,
-    className = '',
-}: {
-    icon: React.ElementType;
-    label: string;
-    value: string;
-    className?: string;
-}) {
-    return (
-        <div className={`flex items-start gap-3 ${className}`}>
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-md-surface-container">
-                <Icon className="h-3.5 w-3.5 text-md-on-surface-variant" />
-            </span>
-            <div className="min-w-0">
-                <p className="text-[11px] text-md-on-surface-variant">
-                    {label}
-                </p>
-                <p className="truncate text-sm font-medium text-md-on-surface">
-                    {value}
-                </p>
-            </div>
-        </div>
-    );
-}
+

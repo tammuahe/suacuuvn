@@ -95,29 +95,74 @@ class OrderController extends Controller
 
     public function lookup(Request $request): Response
     {
-        $data = $request->validate([
-            'reference' => ['required', 'string'],
-            'email' => ['required', 'email'],
-        ]);
+        $orderRef = $request->query('orderRef');
+        $tel = $request->query('tel');
+        $orders = [];
+        if (! $orderRef && ! $tel) {
+            $orders = collect();
+        } else {
+            $orders = Order::query()
+                ->select([
+                    'reference',
+                    'status',
+                    'shipping_address',
+                    'customer_name',
+                    'customer_phone',
+                    'customer_email',
+                ])
+                ->when($orderRef, fn ($q) => $q->where('reference', $orderRef))
+                ->when(! $orderRef && $tel, fn ($q) => $q->where('customer_phone', $tel))
+                ->get()
+                ->map(function ($order) {
+                    $ref = $order->reference;
+                    if ($ref && str_contains($ref, '-')) {
+                        [$prefix, $suffix] = explode('-', $ref, 2);
 
-        $order = Order::with('items')
-            ->where('reference', $data['reference'])
-            ->where('customer_email', $data['email'])
-            ->first();
+                        $len = strlen($suffix);
+                        if ($len <= 5) {
+                            $maskedSuffix = str_repeat('*', $len);
+                        } else {
+                            $maskedSuffix = str_repeat('*', $len - 5).substr($suffix, -5);
+                        }
 
-        return Inertia::render('order/OrderLookup', [
-            'order' => $order ? [
-                'reference' => $order->reference,
-                'status' => $order->status,
-                'total' => $order->total,
-                'created_at' => $order->created_at,
-                'items' => $order->items->map(fn ($item) => [
-                    'product_name' => $item->product_name,
-                    'unit_price' => $item->unit_price,
-                    'quantity' => $item->quantity,
-                    'subtotal' => $item->subtotal,
-                ]),
-            ] : null,
-        ]);
+                        $ref = $prefix.'-'.$maskedSuffix;
+                    }
+                    $phone = null;
+                    if ($order->customer_phone) {
+                        $len = strlen($order->customer_phone);
+
+                        if ($len <= 6) {
+                            $phone = str_repeat('*', $len);
+                        } else {
+                            $phone = substr($order->customer_phone, 0, 3)
+                                .str_repeat('*', $len - 6)
+                                .substr($order->customer_phone, -3);
+                        }
+                    }
+                    $email = null;
+                    if ($order->customer_email && str_contains($order->customer_email, '@')) {
+                        [$name, $domain] = explode('@', $order->customer_email);
+                        $email = substr($name, 0, 2).'***@'.$domain;
+                    }
+
+                    $shipping = null;
+                    if ($order->shipping_address) {
+                        if (\is_array($shipping)) {
+                            unset($shipping['address']);
+                        }
+                    }
+
+                    return [
+                        'reference' => $ref,
+                        'status' => $order->status,
+                        'shipping_address' => $order->shipping_address,
+                        'customer_name' => $order->customer_name,
+                        'customer_phone' => $phone,
+                        'customer_email' => $email,
+                    ];
+                });
+        }
+
+        return Inertia::render('order/OrderLookup', ['orderRef' => $orderRef, 'tel' => $tel, 'orders' => $orders]);
     }
 }

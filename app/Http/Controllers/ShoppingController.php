@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Product;
 use App\Service\OrderService;
-use DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -26,11 +23,12 @@ class ShoppingController extends Controller
 
     public function success(Request $request)
     {
-        if (!session()->has('order_reference')) {
+        if (! session()->has('order_reference')) {
             return redirect()->route('shopping');
         }
         $order = app(OrderService::class)->findByRef(session('order_reference'));
-        return Inertia::render('checkout/Success',['order' => $order]);
+
+        return Inertia::render('checkout/Success', ['order' => $order]);
     }
 
     public function checkout()

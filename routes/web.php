@@ -12,3 +12,4 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('sho
 Route::get('/checkout', [ShoppingController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.submit');
 Route::get('/checkout/sucess', [ShoppingController::class, 'success'])->name('checkout.success');
+Route::get('/order', [OrderController::class, 'lookup'])->name('order.lookup');
