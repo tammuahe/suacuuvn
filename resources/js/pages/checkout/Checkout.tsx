@@ -288,7 +288,7 @@ export default function Checkout() {
     const shipping = 0;
     const total = subtotal + tax + shipping;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
         post(checkout.submit.url(), {
             onSuccess: () => clearCart(),
