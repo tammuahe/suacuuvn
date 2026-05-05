@@ -59,7 +59,7 @@ export function Carousel() {
 
     return (
         <div className="embla w-full">
-            <div className="p-2 overflow-x-hidden" ref={emblaRef}>
+            <div className="overflow-x-hidden p-2" ref={emblaRef}>
                 <div className="flex">
                     {products.map((i) => (
                         <div

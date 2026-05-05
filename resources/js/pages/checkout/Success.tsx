@@ -15,7 +15,7 @@ import { shopping } from '@/routes';
 import orderRoute from '@/routes/order';
 
 interface Product {
-    sku:string;
+    sku: string;
     name: string;
     slug: string;
     image_url: string;
@@ -138,7 +138,10 @@ export default function Success({ order }: Props) {
                     Đặt hàng thành công!
                 </h1>
                 <p className="mt-2 text-sm text-md-on-surface-variant">
-                    Cảm ơn bạn đã tin tưởng AAi Pharma.<br/>Vui lòng ghi lại mã đơn hàng dưới đây để có thể tra cứu tình trạng đơn hàng và yêu cầu hỗ trợ nếu cần thiết.
+                    Cảm ơn bạn đã tin tưởng AAi Pharma.
+                    <br />
+                    Vui lòng ghi lại mã đơn hàng dưới đây để có thể tra cứu tình
+                    trạng đơn hàng và yêu cầu hỗ trợ nếu cần thiết.
                 </p>
 
                 {/* Reference + status row */}
@@ -306,8 +309,8 @@ export default function Success({ order }: Props) {
                     </button>
                     <button
                         onClick={() =>
-                            router.get(orderRoute.lookup(),{
-                                orderRef: order.reference
+                            router.get(orderRoute.lookup(), {
+                                orderRef: order.reference,
                             })
                         }
                         className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-md-surface-container px-5 py-3.5 text-sm font-semibold text-md-on-surface ring-1 ring-md-outline-variant/60 transition-all hover:bg-md-surface-container-high active:scale-95"
@@ -320,6 +323,3 @@ export default function Success({ order }: Props) {
         </main>
     );
 }
-
-
-

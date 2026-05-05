@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class OrderFactory extends Factory
 {
@@ -12,15 +13,27 @@ class OrderFactory extends Factory
 
     private function pickValidAddress($faker, $data)
     {
+        $attempts = 0;
         do {
             $province = $faker->randomElement($data);
             $districts = $province['districts'] ?? [];
-        } while (empty($districts));
+            $attempts++;
+        } while (empty($districts) && $attempts < 10);
 
+        if (empty($districts)) {
+            throw new RuntimeException('Failed to find a province with associated districts.');
+        }
+
+        $attempts = 0;
         do {
             $district = $faker->randomElement($districts);
             $wards = $district['wards'] ?? [];
-        } while (empty($wards));
+            $attempts++;
+        } while (empty($wards) && $attempts < 10);
+
+        if (empty($wards)) {
+            throw new RuntimeException('Failed to find a district with associated wards.');
+        }
 
         $ward = $faker->randomElement($wards);
 
@@ -34,42 +47,42 @@ class OrderFactory extends Factory
         // Load JSON once
         if (! self::$addressData) {
             $path = public_path('addresses.json');
+
+            if (! file_exists($path)) {
+                throw new RuntimeException("Address file not found at {$path}");
+            }
+
             self::$addressData = json_decode(file_get_contents($path), true);
 
             if (! is_array(self::$addressData)) {
-                throw new \Exception('Invalid addresses.json format');
+                throw new RuntimeException('Invalid addresses.json format');
             }
         }
 
         $data = self::$addressData;
 
-        // ✅ Correct usage
         [$province, $district, $ward] = $this->pickValidAddress($faker, $data);
 
-        // ✅ Better status logic
         $paid = $faker->boolean(70);
 
         $status = match (true) {
             ! $paid => 'pending',
             $faker->boolean(80) => 'delivered',
-            default => $faker->randomElement(['processing', 'shipped']),
+            default => $faker->randomElement(['processing', 'shipped', 'cancelled']),
         };
+
+        $createdAt = $faker->dateTimeBetween('-365 days', 'now');
 
         return [
             'reference' => 'ORD-'.strtoupper(Str::random(8)),
-
             'status' => $status,
-
-            // will be updated later
             'tax' => 0,
             'shipping' => 0,
             'discount' => 0,
             'total' => 0,
-
             'customer_name' => $faker->name(),
             'customer_email' => $faker->optional()->safeEmail(),
             'customer_phone' => $faker->phoneNumber(),
-
             'shipping_address' => [
                 'address' => $faker->randomElement([
                     'Số 12 ngõ 45',
@@ -77,11 +90,11 @@ class OrderFactory extends Factory
                     'Thôn Đông',
                     'Nhà văn hóa thôn Đoài',
                 ]),
-                'province_code' => $province['code'],
-                'district_code' => $district['code'],
-                'ward_code' => $ward['code'],
+                'province' => $province['name'] ?? null,
+                'province_code' => $province['code'] ?? null,
+                'district_code' => $district['code'] ?? null,
+                'ward_code' => $ward['code'] ?? null,
             ],
-
             'payment_reference' => $faker->optional()->uuid(),
             'payment_method' => $faker->optional()->randomElement([
                 'cod',
@@ -89,13 +102,9 @@ class OrderFactory extends Factory
                 'credit_card',
                 'e_wallet',
             ]),
-
             'notes' => $faker->optional()->sentence(),
-
-            'paid_at' => $paid ? $faker->dateTimeBetween('-30 days', 'now') : null,
-
-            // ✅ time variance
-            'created_at' => $faker->dateTimeBetween('-30 days', 'now'),
+            'paid_at' => $paid ? $faker->dateTimeBetween($createdAt, (clone $createdAt)->modify('+2 days')) : null,
+            'created_at' => $createdAt,
             'updated_at' => now(),
         ];
     }
@@ -103,24 +112,14 @@ class OrderFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function ($order) {
-
-            // ✅ better distribution of item count
             $itemCount = $this->faker->biasedNumberBetween(1, 6, fn ($x) => 1 - sqrt($x));
 
             $items = OrderItem::factory()
                 ->count($itemCount)
-                ->make();
+                ->create(['order_id' => $order->id]);
 
-            $subtotal = 0;
+            $subtotal = $items->sum('subtotal');
 
-            foreach ($items as $item) {
-                $item->order_id = $order->id;
-                $item->save();
-
-                $subtotal += $item->subtotal;
-            }
-
-            // ✅ realistic pricing logic
             $tax = round($subtotal * 0.1, 2);
             $shipping = rand(10000, 30000);
 

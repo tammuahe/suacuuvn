@@ -12,7 +12,6 @@ import {
     BarChart2,
     Tag,
     CheckCircle2,
-    AlertCircle,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -96,27 +95,26 @@ interface MetricsProps {
 }
 
 // ─── Colour palette ───────────────────────────────────────────────────────────
-
 const C = {
-    primary: '#6750A4',
-    secondary: '#625B71',
+    primary: '#475D92',
+    secondary: '#735187',
     green: '#4CAF50',
-    amber: '#FFC107',
-    red: '#F44336',
-    blue: '#2196F3',
-    teal: '#009688',
-    grid: 'rgba(0,0,0,0.06)',
-    text: '#49454F',
-    muted: '#79747E',
+    amber: '#F59E0B',
+    red: '#BA1A1A',
+    blue: '#2563EB',
+    teal: '#0D9488',
+    grid: 'rgba(73,69,78,0.08)',
+    text: '#49454E',
+    muted: '#7A757F',
     palette: [
-        '#6750A4',
-        '#7B61FF',
-        '#03DAC6',
-        '#CF6679',
-        '#FFB300',
-        '#29B6F6',
-        '#66BB6A',
-        '#FF7043',
+        '#475D92', // primary
+        '#735187', // secondary
+        '#725572', // tertiary
+        '#2563EB', // blue
+        '#0D9488', // teal
+        '#F59E0B', // amber
+        '#4CAF50', // green
+        '#BA1A1A', // error/red
     ],
 };
 
@@ -126,28 +124,30 @@ const BASE = {
     grid: { top: 36, right: 16, bottom: 36, left: 56, containLabel: true },
     tooltip: {
         backgroundColor: '#fff',
-        borderColor: '#E7E0EC',
+        borderColor: '#CBc4cf',
         borderWidth: 1,
-        textStyle: { color: '#1C1B1F', fontSize: 12 },
+        textStyle: { color: '#1C1B20', fontSize: 12 },
         extraCssText:
-            'box-shadow:0 4px 16px rgba(0,0,0,.12);border-radius:12px;',
+            'box-shadow:0 4px 16px rgba(0,0,0,.10);border-radius:12px;',
     },
 };
 
 const STATUS_VI: Record<string, string> = {
     completed: 'Hoàn thành',
     pending: 'Chờ xử lý',
-    canceled: 'Đã hủy',
-    refunded: 'Hoàn tiền',
+    cancelled: 'Đã hủy',
+    delivered: 'Đã giao hàng',
     processing: 'Đang xử lý',
+    shipped: 'Đã giao cho đơn vị vận chuyển',
 };
 
 const STATUS_COLOR: Record<string, string> = {
     completed: C.green,
     pending: C.amber,
-    canceled: C.red,
-    refunded: C.secondary,
+    cancelled: C.red,
+    delivered: C.green,
     processing: C.blue,
+    shipped: C.teal,
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -209,7 +209,7 @@ function Card({
 }) {
     return (
         <div
-            className={`rounded-2xl border border-md-outline-variant/30 bg-md-surface-container-lowest p-5 shadow-sm ${className}`}
+            className={`rounded-2xl border border-md-outline-variant/40 bg-md-surface-container-lowest p-5 shadow-sm ${className}`}
         >
             {children}
         </div>
@@ -235,7 +235,7 @@ function KpiCard({
         primary: 'bg-md-primary/10 text-md-primary',
         green: 'bg-emerald-50 text-emerald-600',
         amber: 'bg-amber-50 text-amber-600',
-        red: 'bg-red-50 text-red-600',
+        red: 'bg-red-50 text-red-700',
         blue: 'bg-blue-50 text-blue-600',
     }[color];
 
@@ -256,7 +256,7 @@ function KpiCard({
                     )}
                     {trend && (
                         <span
-                            className={`mt-1.5 inline-flex items-center gap-0.5 text-xs font-medium ${trend.up ? 'text-emerald-600' : 'text-red-500'}`}
+                            className={`mt-1.5 inline-flex items-center gap-0.5 text-xs font-medium ${trend.up ? 'text-emerald-600' : 'text-red-700'}`}
                         >
                             <TrendingUp
                                 className={`h-3 w-3 ${!trend.up && 'rotate-180'}`}
@@ -352,8 +352,8 @@ export default function Metrics() {
                         x2: 0,
                         y2: 1,
                         colorStops: [
-                            { offset: 0, color: 'rgba(103,80,164,.25)' },
-                            { offset: 1, color: 'rgba(103,80,164,0)' },
+                            { offset: 0, color: 'rgba(71,93,146,.22)' },
+                            { offset: 1, color: 'rgba(71,93,146,0)' },
                         ],
                     },
                 },
@@ -435,7 +435,7 @@ export default function Metrics() {
                         y2: 1,
                         colorStops: [
                             { offset: 0, color: C.primary },
-                            { offset: 1, color: 'rgba(103,80,164,.4)' },
+                            { offset: 1, color: 'rgba(71,93,146,.35)' },
                         ],
                     },
                 },
@@ -475,7 +475,7 @@ export default function Metrics() {
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
-                        shadowColor: 'rgba(0,0,0,.2)',
+                        shadowColor: 'rgba(0,0,0,.15)',
                     },
                 },
             },
@@ -511,7 +511,7 @@ export default function Metrics() {
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
-                        shadowColor: 'rgba(0,0,0,.2)',
+                        shadowColor: 'rgba(0,0,0,.15)',
                     },
                 },
             },
@@ -566,7 +566,8 @@ export default function Metrics() {
                 stack: 't',
                 data: [kpis.unpaid_revenue],
                 barWidth: 48,
-                itemStyle: { color: '#FFCDD2', borderRadius: [8, 8, 0, 0] },
+                // md-primary-container tinted
+                itemStyle: { color: '#D9E2FF', borderRadius: [8, 8, 0, 0] },
             },
         ],
     };
@@ -613,7 +614,7 @@ export default function Metrics() {
                         x2: 1,
                         y2: 0,
                         colorStops: [
-                            { offset: 0, color: 'rgba(103,80,164,.3)' },
+                            { offset: 0, color: 'rgba(71,93,146,.25)' },
                             { offset: 1, color: C.primary },
                         ],
                     },
@@ -676,7 +677,7 @@ export default function Metrics() {
                         x2: 1,
                         y2: 0,
                         colorStops: [
-                            { offset: 0, color: 'rgba(3,218,198,.25)' },
+                            { offset: 0, color: 'rgba(13,148,136,.2)' },
                             { offset: 1, color: C.teal },
                         ],
                     },
@@ -803,63 +804,8 @@ export default function Metrics() {
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
-                        shadowColor: 'rgba(0,0,0,.2)',
+                        shadowColor: 'rgba(0,0,0,.15)',
                     },
-                },
-            },
-        ],
-    };
-
-    const dataQualityOption = {
-        ...BASE,
-        grid: { top: 8, right: 60, bottom: 8, left: 8, containLabel: true },
-        tooltip: {
-            ...BASE.tooltip,
-            trigger: 'axis',
-            axisPointer: { type: 'none' },
-            formatter: (p: { name: string; value: number }[]) =>
-                `${p[0].name}: ${p[0].value.toFixed(1)}%`,
-        },
-        xAxis: {
-            type: 'value',
-            max: 100,
-            axisLabel: { color: C.muted, fontSize: 10, formatter: '{value}%' },
-            splitLine: { lineStyle: { color: C.grid } },
-            axisLine: { show: false },
-            axisTick: { show: false },
-        },
-        yAxis: {
-            type: 'category',
-            data: ['Địa chỉ', 'Số điện thoại', 'Email'],
-            axisLabel: { color: C.text, fontSize: 11 },
-            axisLine: { show: false },
-            axisTick: { show: false },
-        },
-        series: [
-            {
-                name: 'Tỷ lệ',
-                type: 'bar',
-                data: [kpis.address_rate, kpis.phone_rate, kpis.email_rate],
-                barWidth: 24,
-                itemStyle: {
-                    borderRadius: [0, 6, 6, 0],
-                    color: (p: { dataIndex: number }) => {
-                        const v = [
-                            kpis.address_rate,
-                            kpis.phone_rate,
-                            kpis.email_rate,
-                        ][p.dataIndex];
-
-                        return v > 90 ? C.green : v > 75 ? C.amber : C.red;
-                    },
-                },
-                label: {
-                    show: true,
-                    position: 'right',
-                    color: C.muted,
-                    fontSize: 10,
-                    formatter: (p: { value: number }) =>
-                        `${p.value.toFixed(1)}%`,
                 },
             },
         ],
@@ -951,7 +897,7 @@ export default function Metrics() {
                             <p className="text-xs text-md-on-surface-variant">
                                 Tỷ lệ hủy đơn
                             </p>
-                            <p className="mt-1 text-2xl font-bold text-red-500">
+                            <p className="mt-1 text-2xl font-bold text-red-700">
                                 {pct(kpis.cancellation_rate)}
                             </p>
                             <p className="text-xs text-md-on-surface-variant">
@@ -1011,7 +957,7 @@ export default function Metrics() {
                         <p className="text-xs text-md-on-surface-variant">
                             Doanh thu chưa thu
                         </p>
-                        <p className="mt-1 text-xl font-bold text-red-500">
+                        <p className="mt-1 text-xl font-bold text-red-700">
                             {fmt(kpis.unpaid_revenue)}
                         </p>
                         <p className="text-xs text-md-on-surface-variant">
@@ -1109,7 +1055,7 @@ export default function Metrics() {
                             <p className="text-xs text-md-on-surface-variant">
                                 Tổng giảm giá đã cấp
                             </p>
-                            <p className="mt-1 text-xl font-bold text-red-500">
+                            <p className="mt-1 text-xl font-bold text-red-700">
                                 {fmt(kpis.total_discount)}
                             </p>
                             <p className="text-xs text-md-on-surface-variant">
@@ -1196,14 +1142,14 @@ export default function Metrics() {
                             {kpis.avg_fulfill_hours.toFixed(1)}h
                         </p>
                         <p className="text-xs text-md-on-surface-variant">
-                            Từ tạo đơn → paid_at
+                            Từ tạo đơn đến thanh toán
                         </p>
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
                             Tỷ lệ hủy đơn
                         </p>
-                        <p className="mt-1 text-2xl font-bold text-red-500">
+                        <p className="mt-1 text-2xl font-bold text-red-700">
                             {pct(kpis.cancellation_rate)}
                         </p>
                         <p className="text-xs text-md-on-surface-variant">
@@ -1212,73 +1158,20 @@ export default function Metrics() {
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
-                            Đơn đã xóa mềm
+                            Đơn đã xóa
                         </p>
                         <p className="mt-1 text-2xl font-bold text-md-on-surface-variant">
                             {vi(soft_deleted_count)}
-                        </p>
-                        <p className="text-xs text-md-on-surface-variant">
-                            Có trường deleted_at
                         </p>
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
                             Đang xử lý
                         </p>
-                        <p className="mt-1 text-2xl font-bold text-blue-500">
+                        <p className="mt-1 text-2xl font-bold text-blue-600">
                             {vi(kpis.processing_orders)}
                         </p>
-                        <p className="text-xs text-md-on-surface-variant">
-                            Trạng thái processing
-                        </p>
                     </Card>
-                </div>
-            </Section>
-
-            {/* Chất lượng dữ liệu */}
-            <Section icon={AlertCircle} title="Chất lượng dữ liệu khách hàng">
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                    <ChartCard title="Tỷ lệ điền thông tin liên lạc">
-                        <ReactECharts
-                            option={dataQualityOption}
-                            style={{ height: 160 }}
-                        />
-                    </ChartCard>
-                    <div className="grid grid-cols-3 gap-4">
-                        {(
-                            [
-                                {
-                                    label: 'Có Email',
-                                    count: kpis.with_email,
-                                    rate: kpis.email_rate,
-                                },
-                                {
-                                    label: 'Có SĐT',
-                                    count: kpis.with_phone,
-                                    rate: kpis.phone_rate,
-                                },
-                                {
-                                    label: 'Có địa chỉ',
-                                    count: kpis.with_address,
-                                    rate: kpis.address_rate,
-                                },
-                            ] as const
-                        ).map(({ label, count, rate }) => (
-                            <Card key={label}>
-                                <p className="text-xs text-md-on-surface-variant">
-                                    {label}
-                                </p>
-                                <p
-                                    className={`mt-1 text-2xl font-bold ${rate > 90 ? 'text-emerald-600' : rate > 75 ? 'text-amber-500' : 'text-red-500'}`}
-                                >
-                                    {pct(rate)}
-                                </p>
-                                <p className="text-xs text-md-on-surface-variant">
-                                    {vi(count)} đơn
-                                </p>
-                            </Card>
-                        ))}
-                    </div>
                 </div>
             </Section>
         </div>

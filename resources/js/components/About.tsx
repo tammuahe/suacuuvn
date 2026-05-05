@@ -4,29 +4,27 @@ import React from 'react';
 export default function About() {
     return (
         <div className="px-6 lg:px-16">
-
             {/* Section Title */}
             <motion.h1
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
-                className="my-8 text-5xl lg:text-7xl font-extrabold text-md-on-primary-fixed-variant scroll-mt-32"
-                id='about'
+                className="my-8 scroll-mt-32 text-5xl font-extrabold text-md-on-primary-fixed-variant lg:text-7xl"
+                id="about"
             >
                 Về chúng tôi
             </motion.h1>
 
             {/* Intro Section */}
-            <div className="grid lg:grid-cols-2 gap-10">
-
+            <div className="grid gap-10 lg:grid-cols-2">
                 {/* Text */}
                 <motion.h2
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: 0.2 }}
-                    className="text-lg lg:text-xl font-medium text-md-on-primary-fixed-variant leading-relaxed max-w-2xl"
+                    className="max-w-2xl text-lg leading-relaxed font-medium text-md-on-primary-fixed-variant lg:text-xl"
                 >
                     Viện khoa học dược liệu Việt Nam – AAiPharma là đơn vị vinh
                     dự đạt hạng Vàng Thương hiệu số 1 Việt Nam trong lĩnh vực
@@ -44,18 +42,18 @@ export default function About() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: 0.3 }}
-                    className="w-full max-h-100 object-contain rounded-2xl"
+                    className="max-h-100 w-full rounded-2xl object-contain"
                 />
             </div>
 
             {/* Awards Header */}
-            <div className="my-20 text-center max-w-3xl mx-auto">
+            <div className="mx-auto my-20 max-w-3xl text-center">
                 <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="text-3xl lg:text-4xl font-bold text-md-on-background"
+                    className="text-3xl font-bold text-md-on-background lg:text-4xl"
                 >
                     Thương hiệu được tin dùng
                 </motion.h1>
@@ -65,10 +63,10 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="mt-4 text-lg text-md-on-background leading-relaxed"
+                    className="mt-4 text-lg leading-relaxed text-md-on-background"
                 >
-                    AAiPharma tự hào đạt nhiều chứng nhận uy tín, khẳng định
-                    cam kết về chất lượng và sức khỏe người tiêu dùng.
+                    AAiPharma tự hào đạt nhiều chứng nhận uy tín, khẳng định cam
+                    kết về chất lượng và sức khỏe người tiêu dùng.
                 </motion.h2>
             </div>
 
@@ -83,29 +81,28 @@ export default function About() {
                         transition: { staggerChildren: 0.15 },
                     },
                 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
             >
-
                 {[
                     {
-                        img: "iso22000.png",
-                        title: "Chứng nhận ISO 22000",
-                        desc: "Tiêu chuẩn quốc tế về hệ thống quản lý an toàn thực phẩm.",
+                        img: 'iso22000.png',
+                        title: 'Chứng nhận ISO 22000',
+                        desc: 'Tiêu chuẩn quốc tế về hệ thống quản lý an toàn thực phẩm.',
                     },
                     {
-                        img: "Rectangle-15-1.png",
-                        title: "Sản phẩm An Toàn cho Sức Khỏe",
-                        desc: "Vinh danh sản phẩm đạt độ an toàn và hiệu quả cao.",
+                        img: 'Rectangle-15-1.png',
+                        title: 'Sản phẩm An Toàn cho Sức Khỏe',
+                        desc: 'Vinh danh sản phẩm đạt độ an toàn và hiệu quả cao.',
                     },
                     {
-                        img: "gmp.png",
-                        title: "Chứng nhận GMP",
-                        desc: "Quy trình sản xuất đạt chuẩn quốc tế về chất lượng.",
+                        img: 'gmp.png',
+                        title: 'Chứng nhận GMP',
+                        desc: 'Quy trình sản xuất đạt chuẩn quốc tế về chất lượng.',
                     },
                     {
-                        img: "haccp.png",
-                        title: "Chứng nhận HACCP",
-                        desc: "Hệ thống kiểm soát rủi ro an toàn thực phẩm toàn diện.",
+                        img: 'haccp.png',
+                        title: 'Chứng nhận HACCP',
+                        desc: 'Hệ thống kiểm soát rủi ro an toàn thực phẩm toàn diện.',
                     },
                 ].map((item, i) => (
                     <motion.div
@@ -114,18 +111,18 @@ export default function About() {
                             hidden: { opacity: 0, y: 40 },
                             show: { opacity: 1, y: 0 },
                         }}
-                        className="bg-md-surface border border-md-outline-variant rounded-2xl p-6 text-center flex flex-col items-center transition hover:shadow-md hover:-translate-y-1"
+                        className="flex flex-col items-center rounded-2xl border border-md-outline-variant bg-md-surface p-6 text-center transition hover:-translate-y-1 hover:shadow-md"
                     >
                         <img
                             src={item.img}
-                            className="h-32 object-contain mb-4"
+                            className="mb-4 h-32 object-contain"
                         />
 
-                        <h3 className="text-md-on-background text-lg font-semibold min-h-12">
+                        <h3 className="min-h-12 text-lg font-semibold text-md-on-background">
                             {item.title}
                         </h3>
 
-                        <p className="text-sm text-md-on-surface-variant mt-2 leading-relaxed">
+                        <p className="mt-2 text-sm leading-relaxed text-md-on-surface-variant">
                             {item.desc}
                         </p>
                     </motion.div>

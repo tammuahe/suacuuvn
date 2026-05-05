@@ -102,26 +102,42 @@ class DashboardController extends Controller
             ->pluck('count', 'payment_method');
 
         // ── 6. Địa lý (tỉnh/thành từ shipping_address JSON) ──────────────────
-        $provinceExtract = $driver === 'sqlite'
-            ? "json_extract(shipping_address, '$.province')"
-            : "JSON_UNQUOTE(JSON_EXTRACT(shipping_address, '$.province'))";
+        // Build province code → name lookup from addresses.json
+        $provinceMap = [];
+        $addressPath = public_path('addresses.json');
+        if (file_exists($addressPath)) {
+            $addressData = json_decode(file_get_contents($addressPath), true);
+            if (is_array($addressData)) {
+                foreach ($addressData as $p) {
+                    $provinceMap[(int) ($p['code'] ?? 0)] = $p['name'] ?? null;
+                }
+            }
+        }
+
+        $provinceCodeExtract = $driver === 'sqlite'
+            ? "json_extract(shipping_address, '$.province_code')"
+            : "JSON_UNQUOTE(JSON_EXTRACT(shipping_address, '$.province_code'))";
 
         $byProvince = Order::selectRaw("
-                $provinceExtract AS province,
+                $provinceCodeExtract AS province_code,
                 COUNT(*)    AS orders,
                 SUM(total)  AS revenue
             ")
-            ->whereRaw("$provinceExtract IS NOT NULL")
-            ->whereRaw("$provinceExtract NOT IN ('null', '', 'undefined')")
-            ->groupBy('province')
+            ->whereRaw("$provinceCodeExtract IS NOT NULL")
+            ->whereRaw("$provinceCodeExtract NOT IN ('null', '', 'undefined', '0')")
+            ->groupBy('province_code')
             ->orderByDesc('revenue')
             ->limit(10)
             ->get()
-            ->map(fn ($r) => [
-                'province' => $r->province,
-                'orders' => (int) $r->orders,
-                'revenue' => (float) $r->revenue,
-            ]);
+            ->map(function ($r) use ($provinceMap) {
+                $code = (int) $r->province_code;
+
+                return [
+                    'province' => $provinceMap[$code] ?? "Tỉnh #{$code}",
+                    'orders' => (int) $r->orders,
+                    'revenue' => (float) $r->revenue,
+                ];
+            });
 
         // ── 7. Sản phẩm bán chạy ──────────────────────────────────────────────
 

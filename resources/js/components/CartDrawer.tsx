@@ -20,7 +20,6 @@ export default function CartDrawer() {
         router.visit('/checkout');
     };
 
-
     const total = cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
     return (
@@ -54,7 +53,10 @@ export default function CartDrawer() {
                 </div>
 
                 {/* Items */}
-                <div data-lenis-prevent className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-5 py-4">
+                <div
+                    data-lenis-prevent
+                    className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-5 py-4"
+                >
                     {cartItems.length === 0 ? (
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-md-on-surface-variant">
                             <ShoppingCart className="h-16 w-16 opacity-20" />

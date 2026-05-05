@@ -3,7 +3,7 @@ import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import QuantityStepper from '@/components/QuantityStepper';
 import { product as productRoute } from '@/routes/shopping';
-import type { Product} from '@/stores/shoppingStore';
+import type { Product } from '@/stores/shoppingStore';
 import { useShoppingStore } from '@/stores/shoppingStore';
 
 export function formatVND(amount: number | string): string {

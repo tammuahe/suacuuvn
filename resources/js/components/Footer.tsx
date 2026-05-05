@@ -9,10 +9,8 @@ export default function Footer() {
     return (
         <footer className="mt-20 border-t border-md-outline-variant bg-md-surface">
             <div className="mx-auto max-w-7xl px-6 py-12 lg:px-16">
-
                 {/* Top Grid */}
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
-
                     {/* Company */}
                     <div className="space-y-4">
                         <h3 className="text-lg font-semibold text-md-on-surface">
@@ -27,7 +25,8 @@ export default function Footer() {
                                 rel="noopener noreferrer"
                                 className="underline-offset-4 hover:text-md-primary hover:underline"
                             >
-                                Số 22 phố Thành Công, Phường Giảng Võ, TP Hà Nội, Việt Nam
+                                Số 22 phố Thành Công, Phường Giảng Võ, TP Hà
+                                Nội, Việt Nam
                             </a>
                         </p>
                     </div>
@@ -42,7 +41,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href={welcome().url}
-                                    className="block hover:text-md-primary transition"
+                                    className="block transition hover:text-md-primary"
                                 >
                                     Giới thiệu
                                 </a>
@@ -50,7 +49,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href={`${welcome().url}#product`}
-                                    className="block hover:text-md-primary transition"
+                                    className="block transition hover:text-md-primary"
                                 >
                                     Sản phẩm
                                 </a>
@@ -70,7 +69,7 @@ export default function Footer() {
                             <div className="space-y-1">
                                 <a
                                     href="tel:0962320120"
-                                    className="block font-semibold text-md-on-surface hover:text-md-primary transition"
+                                    className="block font-semibold text-md-on-surface transition hover:text-md-primary"
                                 >
                                     0962.320.120
                                 </a>
@@ -85,7 +84,7 @@ export default function Footer() {
                             <IoIosMail className="mt-1" />
                             <a
                                 href="mailto:aaipharma.vn@gmail.com"
-                                className="text-sm text-md-on-surface hover:text-md-primary transition"
+                                className="text-sm text-md-on-surface transition hover:text-md-primary"
                             >
                                 aaipharma.vn@gmail.com
                             </a>
@@ -139,7 +138,7 @@ export default function Footer() {
                         href="http://online.gov.vn/Home/WebDetails/139713"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-md-on-surface-variant hover:text-md-primary transition"
+                        className="text-sm text-md-on-surface-variant transition hover:text-md-primary"
                     >
                         Thông báo bộ công thương
                     </a>

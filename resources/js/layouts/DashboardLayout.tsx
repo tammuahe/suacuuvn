@@ -14,6 +14,8 @@ import {
     Bell,
 } from 'lucide-react';
 import { useState } from 'react';
+import { metrics } from '@/routes/dashboard';
+import { orders } from '@/routes/dashboard';
 
 interface NavItem {
     label: string;
@@ -27,36 +29,31 @@ const NAV: NavItem[] = [
     {
         label: 'Tổng quan',
         icon: LayoutDashboard,
-        href: '/admin',
-        match: '/admin',
+        href: metrics.url(),
+        match: metrics.url(),
     },
     {
         label: 'Đơn hàng',
         icon: ShoppingBag,
-        href: '/admin/orders',
-        match: '/admin/orders',
-        children: [
-            { label: 'Tất cả đơn', href: '/admin/orders', match: '/admin/orders' },
-            { label: 'Chờ xử lý', href: '/admin/orders?status=pending', match: '/admin/orders?status=pending' },
-            { label: 'Đang giao', href: '/admin/orders?status=shipped', match: '/admin/orders?status=shipped' },
-        ],
+        href: orders.url(),
+        match: orders.url(),
     },
     {
         label: 'Sản phẩm',
         icon: Package,
-        href: '/admin/products',
+        href: metrics.url(),
         match: '/admin/products',
     },
     {
         label: 'Khách hàng',
         icon: Users,
-        href: '/admin/customers',
+        href: metrics.url(),
         match: '/admin/customers',
     },
     {
         label: 'Báo cáo',
         icon: BarChart3,
-        href: '/admin/reports',
+        href: metrics.url(),
         match: '/admin/reports',
     },
 ];
@@ -82,7 +79,9 @@ function NavLink({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
                     <Icon className="h-5 w-5 shrink-0" />
                     {!collapsed && (
                         <>
-                            <span className="flex-1 text-left">{item.label}</span>
+                            <span className="flex-1 text-left">
+                                {item.label}
+                            </span>
                             <ChevronDown
                                 className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                             />
@@ -90,7 +89,7 @@ function NavLink({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
                     )}
                 </button>
                 {open && !collapsed && (
-                    <div className="ml-8 mt-1 space-y-0.5 border-l border-md-outline-variant/40 pl-3">
+                    <div className="mt-1 ml-8 space-y-0.5 border-l border-md-outline-variant/40 pl-3">
                         {item.children!.map((child) => (
                             <Link
                                 key={child.match}
@@ -126,7 +125,13 @@ function NavLink({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
     );
 }
 
-function Sidebar({ collapsed, mobile = false }: { collapsed: boolean; mobile?: boolean }) {
+function Sidebar({
+    collapsed,
+    mobile = false,
+}: {
+    collapsed: boolean;
+    mobile?: boolean;
+}) {
     return (
         <aside
             className={`flex h-full flex-col bg-md-surface-container-lowest ring-1 ring-md-outline-variant/30 transition-all duration-300 ${
@@ -207,7 +212,7 @@ export default function DashboardLayout({
                         className="absolute inset-0 bg-md-scrim/40"
                         onClick={() => setMobileOpen(false)}
                     />
-                    <div className="absolute left-0 top-0 h-full">
+                    <div className="absolute top-0 left-0 h-full">
                         <Sidebar collapsed={false} mobile />
                     </div>
                 </div>
@@ -240,7 +245,7 @@ export default function DashboardLayout({
                     <div className="flex items-center gap-2">
                         <button className="relative rounded-xl p-2 text-md-on-surface-variant hover:bg-md-surface-container">
                             <Bell className="h-5 w-5" />
-                            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-md-error" />
+                            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-md-error" />
                         </button>
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-md-primary text-xs font-bold text-md-on-primary">
                             A

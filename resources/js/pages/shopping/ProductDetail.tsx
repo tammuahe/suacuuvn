@@ -14,16 +14,18 @@ interface Props {
 
 const TRUST_BADGES = [
     { icon: ShieldCheck, label: 'Chính hãng 100%' },
-    { icon: Truck,       label: 'Giao hàng toàn quốc' },];
+    { icon: Truck, label: 'Giao hàng toàn quốc' },
+];
 
 export default function ProductDetail({ product }: Props) {
-    const { cartItems, setQuantity, removeItem, setCartOpen } = useShoppingStore();
+    const { cartItems, setQuantity, removeItem, setCartOpen } =
+        useShoppingStore();
     const [pressed, setPressed] = useState(false);
 
-    const cartItem    = cartItems.find((i) => i.id === product.id);
-    const qty         = cartItem?.quantity ?? 0;
+    const cartItem = cartItems.find((i) => i.id === product.id);
+    const qty = cartItem?.quantity ?? 0;
     const discountPct = Math.round(Number(product.discount) * 100);
-    const savings     = Number(product.price) - Number(product.discounted_price);
+    const savings = Number(product.price) - Number(product.discounted_price);
 
     const handleAdd = () => {
         setPressed(true);
@@ -45,15 +47,16 @@ export default function ProductDetail({ product }: Props) {
 
                 {/* Hero grid */}
                 <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-
                     {/* Image */}
                     <div className="relative">
                         <div className="absolute inset-6 rounded-full bg-md-primary-container/60 blur-3xl" />
                         <div className="relative aspect-square overflow-hidden rounded-3xl bg-md-surface-container-low ring-1 ring-md-outline-variant/30">
                             {discountPct > 0 && (
                                 <div className="absolute top-4 left-4 z-10 flex flex-col items-center rounded-2xl bg-md-error px-3 py-2 shadow-lg">
-                                    <span className="text-lg font-black leading-none text-md-on-error">-{discountPct}%</span>
-                                    <span className="text-[10px] font-semibold uppercase tracking-wider text-md-on-error/80"></span>
+                                    <span className="text-lg leading-none font-black text-md-on-error">
+                                        -{discountPct}%
+                                    </span>
+                                    <span className="text-[10px] font-semibold tracking-wider text-md-on-error/80 uppercase"></span>
                                 </div>
                             )}
                             <img
@@ -66,7 +69,7 @@ export default function ProductDetail({ product }: Props) {
 
                     {/* Info */}
                     <div className="flex flex-col gap-6">
-                        <h1 className="text-2xl font-bold leading-snug text-md-on-surface sm:text-3xl">
+                        <h1 className="text-2xl leading-snug font-bold text-md-on-surface sm:text-3xl">
                             {product.name}
                         </h1>
 
@@ -78,7 +81,7 @@ export default function ProductDetail({ product }: Props) {
 
                         {/* Pricing card */}
                         <div className="relative overflow-hidden rounded-3xl bg-md-primary p-5 shadow-lg shadow-md-primary/20">
-                            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+                            <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-white/10" />
                             <div className="absolute -right-2 -bottom-10 h-24 w-24 rounded-full bg-white/5" />
                             <div className="relative mt-1 flex items-baseline gap-3">
                                 <span className="text-4xl font-black text-md-on-primary">
@@ -103,7 +106,7 @@ export default function ProductDetail({ product }: Props) {
                         {qty === 0 ? (
                             <button
                                 onClick={handleAdd}
-                                className={`flex items-center justify-center gap-3 rounded-2xl bg-md-primary-container px-6 py-4 text-base font-bold text-md-on-primary-container shadow-sm transition-all duration-200 hover:brightness-95 hover:shadow-md active:scale-95 ${pressed ? 'scale-95' : ''}`}
+                                className={`flex items-center justify-center gap-3 rounded-2xl bg-md-primary-container px-6 py-4 text-base font-bold text-md-on-primary-container shadow-sm transition-all duration-200 hover:shadow-md hover:brightness-95 active:scale-95 ${pressed ? 'scale-95' : ''}`}
                             >
                                 <ShoppingCart className="h-5 w-5 shrink-0" />
                                 Thêm vào giỏ hàng
@@ -112,7 +115,9 @@ export default function ProductDetail({ product }: Props) {
                             <div className="space-y-3">
                                 <QuantityStepper
                                     quantity={qty}
-                                    onChangeQuantity={(q) => setQuantity(product, q)}
+                                    onChangeQuantity={(q) =>
+                                        setQuantity(product, q)
+                                    }
                                     onRemove={() => removeItem(product.id)}
                                     size="detail"
                                 />
@@ -126,14 +131,16 @@ export default function ProductDetail({ product }: Props) {
                         )}
 
                         {/* Trust badges */}
-                        <div className={`grid grid-cols-${TRUST_BADGES.length} gap-2 between`}>
+                        <div
+                            className={`grid grid-cols-${TRUST_BADGES.length} between gap-2`}
+                        >
                             {TRUST_BADGES.map(({ icon: Icon, label }) => (
                                 <div
                                     key={label}
                                     className="flex flex-col items-center gap-1.5 rounded-2xl bg-md-surface-container-low p-3 text-center ring-1 ring-md-outline-variant/40"
                                 >
                                     <Icon className="h-5 w-5 text-md-primary" />
-                                    <span className="text-[11px] font-medium leading-tight text-md-on-surface-variant">
+                                    <span className="text-[11px] leading-tight font-medium text-md-on-surface-variant">
                                         {label}
                                     </span>
                                 </div>
@@ -146,16 +153,24 @@ export default function ProductDetail({ product }: Props) {
                 {product.detailed_description && (
                     <section className="mt-12">
                         <div className="mb-8 flex items-center gap-4">
-                            <h2 className="text-xl font-bold text-md-on-surface">Mô tả chi tiết</h2>
+                            <h2 className="text-xl font-bold text-md-on-surface">
+                                Mô tả chi tiết
+                            </h2>
                             <div className="h-px flex-1 bg-md-outline-variant" />
                         </div>
                         <div className="rounded-3xl bg-md-surface-container-lowest p-6 ring-1 ring-md-outline-variant/40 sm:p-8">
                             <div className="space-y-4">
-                                {product.detailed_description.split('\n').filter(Boolean).map((para, i) => (
-                                    <p key={i} className="text-sm leading-7 text-md-on-surface-variant">
-                                        {para}
-                                    </p>
-                                ))}
+                                {product.detailed_description
+                                    .split('\n')
+                                    .filter(Boolean)
+                                    .map((para, i) => (
+                                        <p
+                                            key={i}
+                                            className="text-sm leading-7 text-md-on-surface-variant"
+                                        >
+                                            {para}
+                                        </p>
+                                    ))}
                             </div>
                         </div>
                     </section>

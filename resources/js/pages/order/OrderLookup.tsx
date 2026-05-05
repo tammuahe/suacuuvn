@@ -22,14 +22,11 @@ interface PageProps extends Record<string, unknown> {
     orders: Order[];
 }
 
-
-
-function resolveAddress(
-    addr: ShippingAddress,
-    provinces: Province[],
-): string {
+function resolveAddress(addr: ShippingAddress, provinces: Province[]): string {
     const province = provinces.find((p) => p.code === addr.province_code);
-    const district = province?.districts.find((d) => d.code === addr.district_code);
+    const district = province?.districts.find(
+        (d) => d.code === addr.district_code,
+    );
     const ward = district?.wards.find((w) => w.code === addr.ward_code);
 
     return [ward?.name, district?.name, province?.name]
@@ -65,18 +62,17 @@ function OrderCard({
     order,
     searchedRef,
     searchedTel,
-    address
+    address,
 }: {
     order: Order;
     searchedRef?: string;
     searchedTel?: string;
-    address: string
+    address: string;
 }) {
     const displayPhone =
         searchedTel && !searchedRef ? searchedTel : order.customer_phone;
-    const displayRef = searchedRef && searchedRef !== 'ORD-'
-        ? searchedRef
-        : order.reference;  
+    const displayRef =
+        searchedRef && searchedRef !== 'ORD-' ? searchedRef : order.reference;
 
     return (
         <div className="overflow-hidden rounded-3xl bg-md-surface-container-lowest ring-1 ring-md-outline-variant/40">
@@ -138,7 +134,8 @@ export default function OrderLookup() {
         router.get(
             order.lookup(),
             {
-                orderRef: refValue && refValue !== 'ORD-' ? refValue : undefined,
+                orderRef:
+                    refValue && refValue !== 'ORD-' ? refValue : undefined,
                 tel: tel.trim() || undefined,
             },
             { preserveState: true },
@@ -242,7 +239,10 @@ export default function OrderLookup() {
                                     order={order}
                                     searchedRef={orderRef}
                                     searchedTel={tel}
-                                    address={resolveAddress(order.shipping_address, provinces)}
+                                    address={resolveAddress(
+                                        order.shipping_address,
+                                        provinces,
+                                    )}
                                 />
                             ))}
                         </div>

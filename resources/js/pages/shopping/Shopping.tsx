@@ -37,7 +37,7 @@ export default function Shopping({ products }: Props) {
                 <div className="absolute top-1/2 right-1/3 h-32 w-32 -translate-y-1/2 rounded-full bg-white/5" />
 
                 <div className="relative mx-auto max-w-6xl px-6 py-10 sm:py-14">
-                    <p className="mb-2 text-xs font-bold uppercase tracking-widest text-md-on-primary/50">
+                    <p className="mb-2 text-xs font-bold tracking-widest text-md-on-primary/50 uppercase">
                         AAI Pharma
                     </p>
                     <h1 className="text-3xl font-black text-md-on-primary sm:text-4xl">
@@ -47,14 +47,15 @@ export default function Shopping({ products }: Props) {
                         Dòng sản phẩm dinh dưỡng cao cấp từ sữa cừu hữu cơ —
                         thuần khiết, an toàn, tốt cho sức khoẻ cả gia đình.
                     </p>
-
                 </div>
             </div>
 
             <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
                 {/* Section header */}
                 <div className="mb-6 flex items-center gap-4">
-                    <h2 className="shrink-0 text-lg font-bold text-md-on-surface">Sản phẩm</h2>
+                    <h2 className="shrink-0 text-lg font-bold text-md-on-surface">
+                        Sản phẩm
+                    </h2>
                     <div className="h-px flex-1 bg-md-outline-variant" />
                 </div>
 
@@ -76,8 +77,12 @@ export default function Shopping({ products }: Props) {
                                 {icon}
                             </div>
                             <div>
-                                <p className="text-sm font-semibold text-md-on-surface">{title}</p>
-                                <p className="text-xs leading-relaxed text-md-on-surface-variant">{body}</p>
+                                <p className="text-sm font-semibold text-md-on-surface">
+                                    {title}
+                                </p>
+                                <p className="text-xs leading-relaxed text-md-on-surface-variant">
+                                    {body}
+                                </p>
                             </div>
                         </div>
                     ))}

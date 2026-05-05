@@ -1,4 +1,4 @@
-import type { Order } from "@/types/Order";
+import type { Order } from '@/types/Order';
 
 const STATUS_CONFIG: Record<
     Order['status'],

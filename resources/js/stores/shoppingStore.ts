@@ -43,20 +43,24 @@ export const useShoppingStore = create<CartState>()(
 
                 if (existing) {
                     if (newQuantity <= 0) {
-                        set({ cartItems: items.filter((i) => i.id !== product.id) });
+                        set({
+                            cartItems: items.filter((i) => i.id !== product.id),
+                        });
 
                         return;
                     }
 
                     set({
                         cartItems: items.map((i) =>
-                            i.id === product.id ? { ...i, quantity: newQuantity } : i,
+                            i.id === product.id
+                                ? { ...i, quantity: newQuantity }
+                                : i,
                         ),
                     });
                 } else {
                     if (newQuantity <= 0) {
-return;
-}
+                        return;
+                    }
 
                     set({
                         cartItems: [
@@ -64,7 +68,9 @@ return;
                             {
                                 id: product.id,
                                 name: product.name,
-                                price: Number(product.discounted_price || product.price),
+                                price: Number(
+                                    product.discounted_price || product.price,
+                                ),
                                 discount: Number(product.discount),
                                 image_url: product.image_url,
                                 quantity: newQuantity,
@@ -78,7 +84,6 @@ return;
                 set({ cartItems: get().cartItems.filter((i) => i.id !== id) }),
 
             clearCart: () => set({ cartItems: [] }),
-
         }),
         {
             name: 'cart',

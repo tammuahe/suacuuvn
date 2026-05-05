@@ -4,7 +4,7 @@ import Products from '@/components/Products';
 
 export default function Welcome() {
     return (
-        <div className="px-32 py-12 isolate">
+        <div className="isolate px-32 py-12">
             <Hero />
             <About />
             <Products />
