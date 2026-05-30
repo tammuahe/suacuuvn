@@ -183,7 +183,12 @@ class OrderManagementController extends Controller
             'status' => ['required', 'in:pending,processing,shipped,delivered,cancelled'],
         ]);
 
-        $order->update(['status' => $validated['status']]);
+        $data = ['status' => $validated['status']];
+        if ($validated['status'] === 'delivered' && $order->delivered_at === null) {
+            $data['delivered_at'] = now();
+        }
+
+        $order->update($data);
 
         return redirect()->route('dashboard.orders')
             ->with('flash.success', 'Đã cập nhật trạng thái đơn '.$order->reference);
@@ -202,6 +207,18 @@ class OrderManagementController extends Controller
 
         return redirect()->route('dashboard.orders')
             ->with('flash.success', 'Đã đánh dấu thanh toán đơn '.$order->reference);
+    }
+
+    public function uncancel(Order $order): RedirectResponse
+    {
+        if ($order->status !== 'cancelled') {
+            return back()->with('flash.error', 'Chỉ có thể khôi phục đơn hàng đã huỷ.');
+        }
+
+        $order->update(['status' => 'pending']);
+
+        return redirect()->route('dashboard.orders')
+            ->with('flash.success', 'Đã khôi phục đơn hàng '.$order->reference);
     }
 
     public function exportXlsx(Request $request): StreamedResponse

@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import { X, ShoppingCart } from 'lucide-react';
+import checkout from '@/routes/checkout';
 import QuantityStepper from '@/components/QuantityStepper';
 import { useShoppingStore } from '@/stores/shoppingStore';
 import type { CartItem } from '@/stores/shoppingStore';
@@ -17,7 +18,7 @@ export default function CartDrawer() {
 
     const handleCheckout = () => {
         setCartOpen(false);
-        router.visit('/checkout');
+        router.visit(checkout().url);
     };
 
     const total = cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);

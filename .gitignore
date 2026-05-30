@@ -28,4 +28,10 @@ yarn-error.log
 /.zed
 **/.env
 **/env/
-*.md
+
+.planning/
+**.md
+graphify-out
+skills-lock.json
+.agents/skills/vercel-react-best-practices/metadata.json
+.opencode/opencode.json

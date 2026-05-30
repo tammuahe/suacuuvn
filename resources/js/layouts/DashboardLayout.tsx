@@ -1,4 +1,3 @@
-// resources/js/layouts/AdminLayout.tsx
 import { Link, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard,
@@ -12,10 +11,14 @@ import {
     Settings,
     LogOut,
     Bell,
+    CheckCircle2,
+    AlertCircle,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 import { metrics } from '@/routes/dashboard';
 import { orders } from '@/routes/dashboard';
+import { products } from '@/routes/dashboard';
 
 interface NavItem {
     label: string;
@@ -41,8 +44,8 @@ const NAV: NavItem[] = [
     {
         label: 'Sản phẩm',
         icon: Package,
-        href: metrics.url(),
-        match: '/admin/products',
+        href: products.url(),
+        match: products.url(),
     },
     {
         label: 'Khách hàng',
@@ -138,7 +141,6 @@ function Sidebar({
                 mobile ? 'w-72' : collapsed ? 'w-16' : 'w-64'
             }`}
         >
-            {/* Logo */}
             <div
                 className={`flex h-16 shrink-0 items-center border-b border-md-outline-variant/30 px-4 ${
                     collapsed && !mobile ? 'justify-center' : 'gap-3'
@@ -154,7 +156,6 @@ function Sidebar({
                 )}
             </div>
 
-            {/* Nav */}
             <nav className="flex-1 space-y-1 overflow-y-auto p-3">
                 {NAV.map((item) => (
                     <NavLink
@@ -165,7 +166,6 @@ function Sidebar({
                 ))}
             </nav>
 
-            {/* Bottom */}
             <div className="shrink-0 space-y-1 border-t border-md-outline-variant/30 p-3">
                 <Link
                     href="/admin/settings"
@@ -188,6 +188,43 @@ function Sidebar({
     );
 }
 
+function FlashBanner({
+    flash,
+}: {
+    flash: { success?: string; error?: string };
+}) {
+    const [dismissed, setDismissed] = useState(false);
+
+    if (dismissed) {
+        return null;
+    }
+
+    return (
+        <div
+            className={`flex items-center justify-between gap-2 px-4 py-2.5 text-xs font-medium sm:px-6 ${
+                flash.success
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'bg-md-error-container text-md-on-error-container'
+            }`}
+        >
+            <div className="flex items-center gap-2">
+                {flash.success ? (
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                ) : (
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                )}
+                {flash.success ?? flash.error}
+            </div>
+            <button
+                onClick={() => setDismissed(true)}
+                className="shrink-0 rounded-lg p-1 opacity-60 hover:opacity-100"
+            >
+                <X className="h-3.5 w-3.5" />
+            </button>
+        </div>
+    );
+}
+
 export default function DashboardLayout({
     children,
     title,
@@ -197,15 +234,16 @@ export default function DashboardLayout({
 }) {
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { flash } = usePage<{
+        flash?: { success?: string; error?: string };
+    }>().props;
 
     return (
         <div className="flex h-screen overflow-hidden bg-md-surface">
-            {/* Desktop sidebar */}
             <div className="hidden lg:flex">
                 <Sidebar collapsed={collapsed} />
             </div>
 
-            {/* Mobile sidebar overlay */}
             {mobileOpen && (
                 <div className="fixed inset-0 z-50 lg:hidden">
                     <div
@@ -218,9 +256,7 @@ export default function DashboardLayout({
                 </div>
             )}
 
-            {/* Main */}
             <div className="flex flex-1 flex-col overflow-hidden">
-                {/* Topbar */}
                 <header className="flex h-16 shrink-0 items-center justify-between border-b border-md-outline-variant/30 bg-md-surface-container-lowest px-4 sm:px-6">
                     <div className="flex items-center gap-3">
                         <button
@@ -253,7 +289,13 @@ export default function DashboardLayout({
                     </div>
                 </header>
 
-                {/* Page content */}
+                {flash?.success || flash?.error ? (
+                    <FlashBanner
+                        key={flash.success ?? flash.error}
+                        flash={flash}
+                    />
+                ) : null}
+
                 <main className="flex-1 overflow-y-auto p-4 sm:p-6">
                     {children}
                 </main>

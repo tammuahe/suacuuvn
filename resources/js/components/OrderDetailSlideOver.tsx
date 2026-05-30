@@ -13,6 +13,8 @@ import {
     Loader2,
     Ban,
     CheckCircle2,
+    RotateCcw,
+    AlertCircle,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import StatusBadge from '@/components/StatusBadge';
@@ -20,6 +22,7 @@ import {
     show as showRoute,
     updateStatus as updateStatusRoute,
     markPaid,
+    uncancel as uncancelRoute,
 } from '@/routes/dashboard/orders';
 import type { Order } from '@/types/Order';
 
@@ -53,6 +56,10 @@ export default function OrderDetailSlideOver({
     const [statusLoading, setStatusLoading] = useState(false);
     const [payLoading, setPayLoading] = useState(false);
     const [cancelConfirm, setCancelConfirm] = useState(false);
+    const [feedback, setFeedback] = useState<{
+        type: 'success' | 'error';
+        message: string;
+    } | null>(null);
 
     useEffect(() => {
         if (open && orderId) {
@@ -65,6 +72,7 @@ export default function OrderDetailSlideOver({
         } else if (!open) {
             setOrder(null);
             setCancelConfirm(false);
+            setFeedback(null);
         }
     }, [open, orderId]);
 
@@ -74,12 +82,61 @@ export default function OrderDetailSlideOver({
 
     const handleStatusChange = (newStatus: Order['status']) => {
         setStatusLoading(true);
+        setFeedback(null);
         router.patch(
             updateStatusRoute.url(orderId!),
             {
                 status: newStatus,
             },
             {
+                onSuccess: () => {
+                    setFeedback({
+                        type: 'success',
+                        message:
+                            newStatus === 'cancelled'
+                                ? 'Đã huỷ đơn hàng thành công'
+                                : 'Đã cập nhật trạng thái thành công',
+                    });
+                    setCancelConfirm(false);
+                    fetch(showRoute.url(orderId!))
+                        .then((r) => r.json())
+                        .then((data) => setOrder(data.order));
+                },
+                onError: (errors) => {
+                    const msg = Object.values(errors).flat().join(', ');
+                    setFeedback({
+                        type: 'error',
+                        message: msg || 'Có lỗi xảy ra khi cập nhật trạng thái',
+                    });
+                },
+                onFinish: () => setStatusLoading(false),
+            },
+        );
+    };
+
+    const handleUncancel = () => {
+        setStatusLoading(true);
+        setFeedback(null);
+        router.patch(
+            uncancelRoute.url(orderId!),
+            {},
+            {
+                onSuccess: () => {
+                    setFeedback({
+                        type: 'success',
+                        message: 'Đã khôi phục đơn hàng thành công',
+                    });
+                    fetch(showRoute.url(orderId!))
+                        .then((r) => r.json())
+                        .then((data) => setOrder(data.order));
+                },
+                onError: (errors) => {
+                    const msg = Object.values(errors).flat().join(', ');
+                    setFeedback({
+                        type: 'error',
+                        message: msg || 'Có lỗi xảy ra khi khôi phục đơn hàng',
+                    });
+                },
                 onFinish: () => setStatusLoading(false),
             },
         );
@@ -87,10 +144,27 @@ export default function OrderDetailSlideOver({
 
     const handleMarkPaid = () => {
         setPayLoading(true);
+        setFeedback(null);
         router.patch(
             markPaid.url(orderId!),
             {},
             {
+                onSuccess: () => {
+                    setFeedback({
+                        type: 'success',
+                        message: 'Đã đánh dấu thanh toán thành công',
+                    });
+                    fetch(showRoute.url(orderId!))
+                        .then((r) => r.json())
+                        .then((data) => setOrder(data.order));
+                },
+                onError: (errors) => {
+                    const msg = Object.values(errors).flat().join(', ');
+                    setFeedback({
+                        type: 'error',
+                        message: msg || 'Có lỗi xảy ra khi đánh dấu thanh toán',
+                    });
+                },
                 onFinish: () => setPayLoading(false),
             },
         );
@@ -152,6 +226,24 @@ export default function OrderDetailSlideOver({
 
                         {!loading && order && (
                             <div className="flex-1 space-y-6 overflow-y-auto p-6">
+                                {/* Feedback banner */}
+                                {feedback && (
+                                    <div
+                                        className={`flex items-center gap-2 rounded-xl p-3 text-xs font-medium ${
+                                            feedback.type === 'success'
+                                                ? 'bg-emerald-50 text-emerald-700'
+                                                : 'bg-md-error-container text-md-on-error-container'
+                                        }`}
+                                    >
+                                        {feedback.type === 'success' ? (
+                                            <CheckCircle2 className="h-4 w-4 shrink-0" />
+                                        ) : (
+                                            <AlertCircle className="h-4 w-4 shrink-0" />
+                                        )}
+                                        {feedback.message}
+                                    </div>
+                                )}
+
                                 {/* Reference & dates */}
                                 <div className="flex items-center justify-between rounded-2xl border border-md-outline-variant/30 bg-md-surface-container-lowest p-4">
                                     <div>
@@ -495,6 +587,24 @@ export default function OrderDetailSlideOver({
                                             )}
                                         </div>
                                     )}
+
+                                {/* Uncancel button */}
+                                {order.status === 'cancelled' && (
+                                    <div className="border-t border-md-outline-variant/30 pt-4">
+                                        <button
+                                            onClick={handleUncancel}
+                                            disabled={statusLoading}
+                                            className="inline-flex items-center gap-1.5 rounded-xl bg-md-tertiary-container px-3 py-2 text-xs font-semibold text-md-on-tertiary-container transition-colors hover:bg-md-tertiary-container/80"
+                                        >
+                                            {statusLoading ? (
+                                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                            ) : (
+                                                <RotateCcw className="h-3.5 w-3.5" />
+                                            )}
+                                            Khôi phục đơn hàng
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </motion.aside>

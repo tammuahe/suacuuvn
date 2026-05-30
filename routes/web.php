@@ -1,22 +1,26 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderManagementController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductManagementController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ShoppingController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'show'])->name('home');
-Route::get('/welcome', [WelcomeController::class, 'show'])->name('welcome');
-Route::get('/products', [ShoppingController::class, 'show'])->name('shopping');
-Route::get('/products/{product}', [ProductController::class, 'show'])->name('shopping.product');
-Route::get('/checkout', [ShoppingController::class, 'checkout'])->name('checkout');
-Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.submit');
-Route::get('/checkout/sucess', [ShoppingController::class, 'success'])->name('checkout.success');
-Route::get('/order', [OrderController::class, 'lookup'])->name('order.lookup');
+Route::get('/gioi-thieu', [WelcomeController::class, 'show'])->name('welcome');
+Route::get('/san-pham', [ShoppingController::class, 'show'])->name('shopping');
+Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('shopping.product');
+Route::get('/thanh-toan', [ShoppingController::class, 'checkout'])->name('checkout');
+Route::post('/thanh-toan', [OrderController::class, 'store'])->name('checkout.submit');
+Route::get('/thanh-toan/thanh-cong', [ShoppingController::class, 'success'])->name('checkout.success');
+Route::get('/tra-cuu-don-hang', [OrderController::class, 'lookup'])->name('order.lookup');
 Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'attempt'])->name('login.attempt');
 Route::post('/login', [LoginController::class, 'attempt'])->name('login.store');
@@ -28,5 +32,17 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['a
     Route::post('/orders', [OrderManagementController::class, 'store'])->name('orders.store');
     Route::patch('/orders/{order}/status', [OrderManagementController::class, 'updateStatus'])->name('orders.update-status');
     Route::patch('/orders/{order}/mark-paid', [OrderManagementController::class, 'markAsPaid'])->name('orders.mark-paid');
+    Route::patch('/orders/{order}/uncancel', [OrderManagementController::class, 'uncancel'])->name('orders.uncancel');
     Route::get('/orders/export/xlsx', [OrderManagementController::class, 'exportXlsx'])->name('orders.export');
+    Route::get('/products', [ProductManagementController::class, 'index'])->name('products');
+    Route::post('/products', [ProductManagementController::class, 'store'])->name('products.store');
+    Route::patch('/products/{product}', [ProductManagementController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductManagementController::class, 'destroy'])->name('products.destroy');
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
+    Route::get('/customers/{identifier}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+    Route::get('/reports/export/{section}', [ReportController::class, 'export'])->name('reports.export');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::post('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');
 });

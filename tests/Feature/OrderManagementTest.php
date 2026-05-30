@@ -153,6 +153,38 @@ test('status update requires valid status', function () {
         ->assertSessionHasErrors('status');
 });
 
+test('admin can cancel an order', function () {
+    $order = Order::factory()->create(['status' => 'pending']);
+
+    $this->actingAs($this->admin)
+        ->patch(route('dashboard.orders.update-status', $order), [
+            'status' => 'cancelled',
+        ])
+        ->assertRedirect(route('dashboard.orders'));
+
+    expect($order->fresh()->status)->toBe('cancelled');
+});
+
+test('admin can uncancel a cancelled order', function () {
+    $order = Order::factory()->create(['status' => 'cancelled']);
+
+    $this->actingAs($this->admin)
+        ->patch(route('dashboard.orders.uncancel', $order))
+        ->assertRedirect(route('dashboard.orders'));
+
+    expect($order->fresh()->status)->toBe('pending');
+});
+
+test('uncancel fails for non-cancelled order', function () {
+    $order = Order::factory()->create(['status' => 'pending']);
+
+    $this->actingAs($this->admin)
+        ->patch(route('dashboard.orders.uncancel', $order))
+        ->assertRedirect();
+
+    expect($order->fresh()->status)->toBe('pending');
+});
+
 // ─── Mark Paid ────────────────────────────────────────────────────────────────
 
 test('admin can mark an order as paid', function () {

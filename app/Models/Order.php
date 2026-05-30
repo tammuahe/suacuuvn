@@ -28,6 +28,7 @@ class Order extends Model
         'payment_method',
         'notes',
         'paid_at',
+        'delivered_at',
     ];
 
     protected $casts = [
@@ -38,6 +39,7 @@ class Order extends Model
         'total' => 'decimal:2',
         'shipping_address' => 'array',
         'paid_at' => 'datetime',
+        'delivered_at' => 'datetime',
     ];
 
     // Scopes

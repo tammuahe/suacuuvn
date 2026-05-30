@@ -42,7 +42,7 @@ export default function ProductCard({ product }: Props) {
 
             {/* Image — links to detail page */}
             <Link
-                href={productRoute(product.id)}
+                    href={productRoute(product.slug)}
                 className="relative block aspect-square overflow-hidden bg-md-surface-container-low"
             >
                 <img
@@ -54,7 +54,7 @@ export default function ProductCard({ product }: Props) {
 
             {/* Body */}
             <div className="flex flex-1 flex-col gap-3 p-4">
-                <Link href={productRoute(product.id)}>
+                <Link href={productRoute(product.slug)}>
                     <h3 className="line-clamp-3 text-sm leading-snug font-medium text-md-on-surface transition-colors hover:text-md-primary">
                         {product.name}
                     </h3>

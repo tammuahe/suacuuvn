@@ -15,7 +15,7 @@ export default function Navbar() {
     const totalItems = cartItems.length;
     const count = mounted ? totalItems : 0;
     const { url } = usePage();
-    const showingRoutes = ['/products', '/product'];
+    const showingRoutes = [shopping().url];
 
     const showCart = showingRoutes.some(
         (path) => url === path || url.startsWith(path + '/'),

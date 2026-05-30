@@ -203,6 +203,13 @@ class DashboardController extends Controller
 
         $softDeletedCount = Order::onlyTrashed()->count();
 
+        $recentOrders = Order::latest()
+            ->limit(5)
+            ->with('items.product:id,name')
+            ->get();
+
+        $deliveredToday = Order::whereDate('delivered_at', today())->count();
+
         return Inertia::render('dashboard/Metrics', [
             'kpis' => $kpis,
             'by_status' => $byStatus,
@@ -215,6 +222,8 @@ class DashboardController extends Controller
             'avg_items_per_order' => round((float) $avgItemsPerOrder, 2),
             'customer_metrics' => $customerMetrics,
             'soft_deleted_count' => $softDeletedCount,
+            'recent_orders' => $recentOrders,
+            'delivered_today' => $deliveredToday,
         ]);
     }
 }
