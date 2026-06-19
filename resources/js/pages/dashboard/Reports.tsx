@@ -1,24 +1,19 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    DollarSign,
-    TrendingUp,
-    Package,
-    MapPin,
-    Clock,
-    CreditCard,
-    Tag,
-    ShoppingCart,
-    FileDown,
-    Info,
-    Users,
-    ShoppingBag,
-    ArrowUpDown,
     ChevronLeft,
     ChevronRight,
-    Eye,
-    X,
+    Clock,
+    CreditCard,
+    FileDown,
+    Info,
+    MapPin,
+    Package,
+    ShoppingBag,
+    ShoppingCart,
+    Tag,
+    TrendingUp,
+    Users,
 } from 'lucide-react';
-import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Tip from '@/components/dashboard/Tip';
 import StatusBadge from '@/components/StatusBadge';
@@ -218,6 +213,26 @@ const STATUS_VI: Record<string, string> = {
     cancelled: 'Đã huỷ',
 };
 
+function ChangeBadge({ value }: { value: number }) {
+    if (value === 0) {
+        return (
+            <span className="text-xs text-md-on-surface-variant">—</span>
+        );
+    }
+
+    const up = value > 0;
+
+    return (
+        <span
+            className={`inline-flex items-center gap-0.5 text-xs font-medium ${up ? 'text-emerald-600' : 'text-red-700'}`}
+        >
+            <TrendingUp className={`h-3 w-3 ${!up && 'rotate-180'}`} />
+            {up ? '+' : ''}
+            {value}%
+        </span>
+    );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Reports() {
@@ -238,7 +253,6 @@ export default function Reports() {
         top_products,
         avg_items_per_order,
         customer_summary,
-        revenue_breakdown,
         total_discount,
         discount_rate,
         total_tax,
@@ -252,8 +266,6 @@ export default function Reports() {
         soft_deleted_count,
         revenue_by_month,
     } = props;
-
-    const [detailOrderId, setDetailOrderId] = useState<number | null>(null);
 
     const buildExportUrl = (section: string) => {
         const params = new URLSearchParams();
@@ -272,29 +284,6 @@ export default function Reports() {
         { key: 'provinces', label: 'Tỉnh/Thành' },
         { key: 'payments', label: 'Phương thức TT' },
     ];
-
-    function ChangeBadge({ value }: { value: number }) {
-        if (value === 0) {
-            return (
-                <span className="text-xs text-md-on-surface-variant">
-                    —
-                </span>
-            );
-        }
-
-        const up = value > 0;
-
-        return (
-            <span
-                className={`inline-flex items-center gap-0.5 text-xs font-medium ${up ? 'text-emerald-600' : 'text-red-700'}`}
-            >
-                <TrendingUp
-                    className={`h-3 w-3 ${!up && 'rotate-180'}`}
-                />
-                {up ? '+' : ''}{value}%
-            </span>
-        );
-    }
 
     return (
         <div className="space-y-8">
@@ -475,15 +464,12 @@ export default function Reports() {
                     </div>
                     <div className="divide-y divide-md-outline-variant/20 md:hidden">
                         {revenue_by_day.map((d) => (
-                            <div
-                                key={d.date}
-                                className="px-4 py-4"
-                            >
+                            <div key={d.date} className="px-4 py-4">
                                 <div className="flex items-start justify-between">
                                     <p className="text-sm font-medium text-md-on-surface">
-                                        {new Date(
-                                            d.date,
-                                        ).toLocaleDateString('vi-VN')}
+                                        {new Date(d.date).toLocaleDateString(
+                                            'vi-VN',
+                                        )}
                                     </p>
                                     <p className="text-sm font-semibold text-md-on-surface">
                                         {fmt(d.revenue)}
@@ -603,10 +589,7 @@ export default function Reports() {
                             </div>
                             <div className="divide-y divide-md-outline-variant/20 md:hidden">
                                 {orders.data.map((o) => (
-                                    <div
-                                        key={o.id}
-                                        className="px-4 py-4"
-                                    >
+                                    <div key={o.id} className="px-4 py-4">
                                         <div className="flex items-start justify-between">
                                             <div>
                                                 <p className="font-mono text-xs font-semibold text-md-primary">
@@ -1107,7 +1090,10 @@ export default function Reports() {
             {/* ─── Revenue by month ──────────────────────────────────────── */}
 
             {revenue_by_month.length > 0 && (
-                <Section icon={TrendingUp} title="Doanh thu theo tháng (12 tháng)">
+                <Section
+                    icon={TrendingUp}
+                    title="Doanh thu theo tháng (12 tháng)"
+                >
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                         {revenue_by_month.map((m) => (
                             <Card key={m.month}>
