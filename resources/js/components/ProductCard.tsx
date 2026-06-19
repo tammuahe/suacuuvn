@@ -42,7 +42,7 @@ export default function ProductCard({ product }: Props) {
 
             {/* Image — links to detail page */}
             <Link
-                    href={productRoute(product.slug)}
+                href={productRoute(product.slug)}
                 className="relative block aspect-square overflow-hidden bg-md-surface-container-low"
             >
                 <img

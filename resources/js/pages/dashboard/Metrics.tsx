@@ -12,9 +12,11 @@ import {
     BarChart2,
     Tag,
     CheckCircle2,
+    Info,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import Tip from '@/components/dashboard/Tip';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -221,6 +223,7 @@ function KpiCard({
     value,
     sub,
     trend,
+    tip,
     icon: Icon,
     color = 'primary',
 }: {
@@ -228,6 +231,7 @@ function KpiCard({
     value: string;
     sub?: string;
     trend?: { value: string; up: boolean };
+    tip?: string;
     icon: React.ElementType;
     color?: 'primary' | 'green' | 'amber' | 'red' | 'blue';
 }) {
@@ -243,8 +247,15 @@ function KpiCard({
         <Card>
             <div className="flex items-start justify-between">
                 <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-medium text-md-on-surface-variant">
+                    <p
+                        className={`text-xs font-medium text-md-on-surface-variant ${tip ? 'truncate overflow-visible' : 'truncate'}`}
+                    >
                         {label}
+                        {tip && (
+                            <Tip label={tip}>
+                                <Info className="ml-0.5 inline h-3 w-3 shrink-0 align-text-top text-md-on-surface-variant/60" />
+                            </Tip>
+                        )}
                     </p>
                     <p className="mt-1.5 text-2xl font-bold tracking-tight text-md-on-surface">
                         {value}
@@ -828,14 +839,14 @@ export default function Metrics() {
                     <KpiCard
                         label="Doanh thu thuần"
                         value={fmt(kpis.net_revenue)}
-                        sub="Sau giảm giá"
+                        sub="Doanh thu sau chiết khấu"
                         icon={TrendingUp}
                         color="green"
                     />
                     <KpiCard
-                        label="Giá trị đơn TB (AOV)"
+                        label="Giá trị đơn hàng trung bình"
                         value={fmt(kpis.aov)}
-                        sub="Trên mỗi đơn"
+                        tip="AOV (Average Order Value): Tổng doanh thu trên tổng số đơn hàng"
                         icon={ShoppingCart}
                         color="blue"
                     />
@@ -884,13 +895,13 @@ export default function Metrics() {
                     <div className="grid grid-rows-3 gap-4">
                         <Card>
                             <p className="text-xs text-md-on-surface-variant">
-                                Tỷ lệ chuyển đổi
+                                Tỉ lệ thanh toán thành công
                             </p>
                             <p className="mt-1 text-2xl font-bold text-emerald-600">
                                 {pct(kpis.payment_success_rate)}
                             </p>
                             <p className="text-xs text-md-on-surface-variant">
-                                Đã thanh toán / tổng đơn
+                                Trên tổng số đơn hàng
                             </p>
                         </Card>
                         <Card>
@@ -912,7 +923,7 @@ export default function Metrics() {
                                 {vi(kpis.unpaid_orders)}
                             </p>
                             <p className="text-xs text-md-on-surface-variant">
-                                Không có paid_at
+                                Đơn hàng chưa được thanh toán
                             </p>
                         </Card>
                     </div>
@@ -931,7 +942,7 @@ export default function Metrics() {
                             style={{ height: 240 }}
                         />
                     </ChartCard>
-                    <ChartCard title="Đã thu vs Chưa thu">
+                    <ChartCard title="Đã thanh toán / Chưa thanh toán">
                         <ReactECharts
                             option={paidUnpaidOption}
                             style={{ height: 240 }}
@@ -941,7 +952,7 @@ export default function Metrics() {
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
-                            Doanh thu đã thu
+                            Doanh thu đã thanh toán
                         </p>
                         <p className="mt-1 text-xl font-bold text-emerald-600">
                             {fmt(kpis.paid_revenue)}
@@ -955,24 +966,24 @@ export default function Metrics() {
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
-                            Doanh thu chưa thu
+                            Doanh thu chưa thanh toán
                         </p>
                         <p className="mt-1 text-xl font-bold text-red-700">
                             {fmt(kpis.unpaid_revenue)}
                         </p>
                         <p className="text-xs text-md-on-surface-variant">
-                            Đang chờ thu tiền
+                            Đơn hàng chưa được thanh toán
                         </p>
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
-                            Tỷ lệ thanh toán thành công
+                            Tỉ lệ thanh toán thành công
                         </p>
                         <p className="mt-1 text-xl font-bold text-md-primary">
                             {pct(kpis.payment_success_rate)}
                         </p>
                         <p className="text-xs text-md-on-surface-variant">
-                            payment_reference + paid_at
+                            Đơn hàng có xác nhận thanh toán
                         </p>
                     </Card>
                 </div>
@@ -982,28 +993,29 @@ export default function Metrics() {
             <Section icon={Users} title="Khách hàng">
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     <KpiCard
-                        label="Khách hàng duy nhất"
+                        label="Tổng số khách hàng"
                         value={vi(customer_metrics.unique_customers)}
                         icon={Users}
                         color="primary"
                     />
                     <KpiCard
-                        label="Tỷ lệ quay lại"
+                        label="Tỉ lệ quay lại"
                         value={pct(customer_metrics.repeat_rate)}
                         sub={`${vi(customer_metrics.repeat_customers)} khách`}
                         icon={TrendingUp}
                         color="green"
                     />
                     <KpiCard
-                        label="Đơn TB / khách"
+                        label="Số đơn trung bình"
                         value={customer_metrics.orders_per_customer.toFixed(2)}
+                        tip="Tổng số đơn hàng trên tổng số khách hàng"
                         icon={ShoppingCart}
                         color="blue"
                     />
                     <KpiCard
                         label="CLV trung bình"
                         value={fmt(customer_metrics.avg_clv)}
-                        sub="Giá trị vòng đời"
+                        tip="CLV (Customer Lifetime Value): Tổng doanh thu trên tổng số khách hàng"
                         icon={DollarSign}
                         color="amber"
                     />
@@ -1053,7 +1065,7 @@ export default function Metrics() {
                     <div className="grid grid-cols-2 content-start gap-4">
                         <Card>
                             <p className="text-xs text-md-on-surface-variant">
-                                Tổng giảm giá đã cấp
+                                Tổng chiết khấu
                             </p>
                             <p className="mt-1 text-xl font-bold text-red-700">
                                 {fmt(kpis.total_discount)}
@@ -1075,18 +1087,18 @@ export default function Metrics() {
                         </Card>
                         <Card>
                             <p className="text-xs text-md-on-surface-variant">
-                                Thuế VAT đã thu
+                                Thuế VAT
                             </p>
                             <p className="mt-1 text-xl font-bold text-md-primary">
                                 {fmt(kpis.total_tax)}
                             </p>
                             <p className="text-xs text-md-on-surface-variant">
-                                10% VAT
+                                Thuế giá trị gia tăng
                             </p>
                         </Card>
                         <Card>
                             <p className="text-xs text-md-on-surface-variant">
-                                Phí vận chuyển thu được
+                                Phí vận chuyển
                             </p>
                             <p className="mt-1 text-xl font-bold text-teal-600">
                                 {fmt(kpis.total_shipping)}
@@ -1137,28 +1149,28 @@ export default function Metrics() {
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
                             Thời gian xử lý trung bình
+                            <Tip label="Thời gian trung bình từ khi tạo đơn đến khi khách hàng thanh toán">
+                                <Info className="ml-0.5 inline h-3 w-3 align-text-top text-md-on-surface-variant/60" />
+                            </Tip>
                         </p>
                         <p className="mt-1 text-2xl font-bold text-md-primary">
                             {kpis.avg_fulfill_hours.toFixed(1)}h
                         </p>
-                        <p className="text-xs text-md-on-surface-variant">
-                            Từ tạo đơn đến thanh toán
-                        </p>
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
-                            Tỷ lệ hủy đơn
+                            Tỉ lệ huỷ đơn
                         </p>
                         <p className="mt-1 text-2xl font-bold text-red-700">
                             {pct(kpis.cancellation_rate)}
                         </p>
                         <p className="text-xs text-md-on-surface-variant">
-                            {vi(kpis.canceled_orders)} đơn đã hủy
+                            {vi(kpis.canceled_orders)} đơn đã huỷ
                         </p>
                     </Card>
                     <Card>
                         <p className="text-xs text-md-on-surface-variant">
-                            Đơn đã xóa
+                            Đơn hàng đã xoá
                         </p>
                         <p className="mt-1 text-2xl font-bold text-md-on-surface-variant">
                             {vi(soft_deleted_count)}

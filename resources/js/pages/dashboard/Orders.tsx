@@ -492,7 +492,7 @@ export default function Orders() {
                                             </button>
                                         </th>
                                         <th className="px-5 py-3 text-xs font-semibold text-md-on-surface-variant">
-                                            Điện thoại
+                                            Số điện thoại
                                         </th>
                                         <th className="px-5 py-3">
                                             <button
@@ -590,11 +590,11 @@ export default function Orders() {
                                             <td className="px-5 py-3.5">
                                                 {order.paid_at ? (
                                                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                                                        Đã TT
+                                                        Đã thanh toán
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-600">
-                                                        Chưa TT
+                                                        Chưa thanh toán
                                                     </span>
                                                 )}
                                             </td>
@@ -663,11 +663,11 @@ export default function Orders() {
                                         </span>
                                         {order.paid_at ? (
                                             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                                                Đã TT
+                                                Đã thanh toán
                                             </span>
                                         ) : (
                                             <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-600">
-                                                Chưa TT
+                                                Chưa thanh toán
                                             </span>
                                         )}
                                     </div>

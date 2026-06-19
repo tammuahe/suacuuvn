@@ -53,11 +53,11 @@ class CustomerController extends Controller
             ->groupBy('identifier');
 
         if ($search) {
-            $customersQuery->having(function ($q) use ($search) {
-                $q->where('customer_name', 'like', "%{$search}%")
-                    ->orWhere('customer_email', 'like', "%{$search}%")
-                    ->orWhere('customer_phone', 'like', "%{$search}%");
-            });
+            $customersQuery->havingRaw('MAX(customer_name) LIKE ? OR MAX(customer_email) LIKE ? OR MAX(customer_phone) LIKE ?', [
+                "%{$search}%",
+                "%{$search}%",
+                "%{$search}%",
+            ]);
         }
 
         $customersQuery->orderBy($sort, $direction);

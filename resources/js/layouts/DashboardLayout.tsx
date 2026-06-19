@@ -2,7 +2,6 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard,
     ShoppingBag,
-    PackageSearch,
     ChevronDown,
     Menu,
     Package,
@@ -10,15 +9,20 @@ import {
     BarChart3,
     Settings,
     LogOut,
-    Bell,
     CheckCircle2,
     AlertCircle,
     X,
 } from 'lucide-react';
 import { useState } from 'react';
-import { metrics } from '@/routes/dashboard';
-import { orders } from '@/routes/dashboard';
-import { products } from '@/routes/dashboard';
+import NotificationBell from '@/components/dashboard/NotificationBell';
+import {
+    metrics,
+    orders,
+    products,
+    customers,
+    reports,
+    settings,
+} from '@/routes/dashboard';
 
 interface NavItem {
     label: string;
@@ -50,14 +54,14 @@ const NAV: NavItem[] = [
     {
         label: 'Khách hàng',
         icon: Users,
-        href: metrics.url(),
-        match: '/admin/customers',
+        href: customers.url(),
+        match: customers.url(),
     },
     {
         label: 'Báo cáo',
         icon: BarChart3,
-        href: metrics.url(),
-        match: '/admin/reports',
+        href: reports.url(),
+        match: reports.url(),
     },
 ];
 
@@ -146,12 +150,12 @@ function Sidebar({
                     collapsed && !mobile ? 'justify-center' : 'gap-3'
                 }`}
             >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-md-primary">
-                    <PackageSearch className="h-4 w-4 text-md-on-primary" />
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white">
+                    <img src="/logo_cropped.png" className="h-5 w-5" alt="Logo" />
                 </div>
                 {(!collapsed || mobile) && (
                     <span className="text-sm font-black text-md-on-surface">
-                        Admin
+                        Sữa Cừu VN
                     </span>
                 )}
             </div>
@@ -168,7 +172,7 @@ function Sidebar({
 
             <div className="shrink-0 space-y-1 border-t border-md-outline-variant/30 p-3">
                 <Link
-                    href="/admin/settings"
+                    href={settings.url()}
                     className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-md-on-surface-variant transition-colors hover:bg-md-surface-container hover:text-md-on-surface"
                 >
                     <Settings className="h-5 w-5 shrink-0" />
@@ -279,10 +283,7 @@ export default function DashboardLayout({
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <button className="relative rounded-xl p-2 text-md-on-surface-variant hover:bg-md-surface-container">
-                            <Bell className="h-5 w-5" />
-                            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-md-error" />
-                        </button>
+                        <NotificationBell />
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-md-primary text-xs font-bold text-md-on-primary">
                             A
                         </div>

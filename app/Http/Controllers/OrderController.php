@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\OrderNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -89,6 +91,16 @@ class OrderController extends Controller
             'status' => 'processing',
         ]);
 
+        $this->notifyAdmins($order, 'new_order', 'Đơn web '.$order->reference.' từ '.$order->customer_name);
+
+        $existing = Order::where('customer_phone', $order->customer_phone)
+            ->where('id', '!=', $order->id)
+            ->count();
+
+        if ($existing === 0) {
+            $this->notifyAdmins($order, 'new_customer', 'Khách mới '.$order->customer_name.' ('.$order->customer_phone.')');
+        }
+
         return redirect()->route('checkout.success')
             ->with('order_reference', $order->reference);
     }
@@ -164,5 +176,14 @@ class OrderController extends Controller
         }
 
         return Inertia::render('order/OrderLookup', ['orderRef' => $orderRef, 'tel' => $tel, 'orders' => $orders]);
+    }
+
+    private function notifyAdmins(Order $order, string $type, string $message): void
+    {
+        $admins = User::where('role', 'admin')->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new OrderNotification($order, $type, $message));
+        }
     }
 }

@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import { Eye, EyeOff, Lock, PackageSearch, User } from 'lucide-react';
+import { Eye, EyeOff, Lock, User } from 'lucide-react';
 import { useState } from 'react';
 import { login } from '@/routes';
 
@@ -21,33 +21,39 @@ export default function Login() {
 
     return (
         <div className="flex min-h-screen bg-md-surface">
-            <div className="relative hidden flex-1 flex-col justify-between overflow-hidden bg-md-primary p-12 lg:flex">
-                <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-white/5" />
-                    <div className="absolute top-1/3 -right-24 h-72 w-72 rounded-full bg-white/5" />
-                    <div className="absolute -bottom-20 left-1/4 h-64 w-64 rounded-full bg-white/5" />
-                    <div className="absolute top-1/2 left-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10" />
-                    <div className="absolute top-1/2 left-1/2 h-100 w-100 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10" />
+            <div className="hidden flex-1 flex-col justify-between bg-md-surface-container-lowest p-12 lg:flex">
+                <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white shadow-sm">
+                        <img src="/logo_cropped.png" className="h-6 w-6" alt="Logo" />
+                    </div>
+                    <div>
+                        <span className="text-lg font-black text-md-on-surface">
+                            Sữa Cừu Việt Nam
+                        </span>
+                        <p className="text-xs text-md-on-surface-variant">
+                            Trang quản trị
+                        </p>
+                    </div>
                 </div>
 
-                <div className="relative flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15">
-                        <PackageSearch className="h-5 w-5 text-white" />
-                    </div>
-                    <span className="text-lg font-black text-white">
-                        SuaCuuVN
-                    </span>
+                <div className="space-y-2">
+                    <p className="text-2xl font-black tracking-tight text-md-on-surface">
+                        Quản lý cửa hàng
+                    </p>
+                    <p className="max-w-xs text-sm leading-relaxed text-md-on-surface-variant">
+                        Theo dõi đơn hàng, sản phẩm, khách hàng và báo cáo doanh thu.
+                    </p>
                 </div>
             </div>
 
             <div className="flex w-full flex-col items-center justify-center px-6 py-12 lg:w-120 lg:shrink-0">
                 <div className="mb-10 flex items-center gap-3 lg:hidden">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-md-primary">
-                        <PackageSearch className="h-5 w-5 text-md-on-primary" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white">
+                        <img src="/logo_cropped.png" className="h-6 w-6" alt="Logo" />
                     </div>
-                    <span className="text-lg font-black text-md-on-surface">
-                        SuaCuuVN
-                    </span>
+                        <span className="text-lg font-black text-md-on-surface">
+                            Sữa Cừu Việt Nam
+                        </span>
                 </div>
 
                 <div className="w-full max-w-sm">

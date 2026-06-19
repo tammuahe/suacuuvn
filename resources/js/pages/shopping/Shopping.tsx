@@ -31,13 +31,9 @@ export default function Shopping({ products }: Props) {
     return (
         <>
             {/* ── Hero ── */}
-            <div className="relative overflow-hidden bg-md-primary">
-                <div className="absolute -top-16 -right-16 h-64 w-64 rounded-full bg-white/10" />
-                <div className="absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-white/5" />
-                <div className="absolute top-1/2 right-1/3 h-32 w-32 -translate-y-1/2 rounded-full bg-white/5" />
-
-                <div className="relative mx-auto max-w-6xl px-6 py-10 sm:py-14">
-                    <p className="mb-2 text-xs font-bold tracking-widest text-md-on-primary/50 uppercase">
+            <div className="bg-md-primary">
+                <div className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
+                    <p className="mb-2 text-xs font-bold tracking-widest text-md-on-primary/70 uppercase">
                         AAI Pharma
                     </p>
                     <h1 className="text-3xl font-black text-md-on-primary sm:text-4xl">

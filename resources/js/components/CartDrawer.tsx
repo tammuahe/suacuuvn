@@ -1,7 +1,7 @@
 import { router } from '@inertiajs/react';
 import { X, ShoppingCart } from 'lucide-react';
-import checkout from '@/routes/checkout';
 import QuantityStepper from '@/components/QuantityStepper';
+import { checkout } from '@/routes';
 import { useShoppingStore } from '@/stores/shoppingStore';
 import type { CartItem } from '@/stores/shoppingStore';
 

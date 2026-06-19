@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\OrderNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -173,6 +175,16 @@ class OrderManagementController extends Controller
             return $order;
         });
 
+        $this->notifyAdmins($order, 'new_order', 'Đơn mới '.$order->reference.' từ '.$order->customer_name);
+
+        $existing = Order::where('customer_phone', $order->customer_phone)
+            ->where('id', '!=', $order->id)
+            ->count();
+
+        if ($existing === 0) {
+            $this->notifyAdmins($order, 'new_customer', 'Khách mới '.$order->customer_name.' ('.$order->customer_phone.')');
+        }
+
         return redirect()->route('dashboard.orders')
             ->with('flash.success', 'Đã tạo đơn hàng '.$order->reference);
     }
@@ -190,6 +202,9 @@ class OrderManagementController extends Controller
 
         $order->update($data);
 
+        $vn = ['pending' => 'Chờ', 'processing' => 'Xử lý', 'shipped' => 'Giao', 'delivered' => 'Xong', 'cancelled' => 'Huỷ'];
+        $this->notifyAdmins($order, 'status_change', 'Đơn '.$order->reference.' → '.($vn[$validated['status']] ?? $validated['status']));
+
         return redirect()->route('dashboard.orders')
             ->with('flash.success', 'Đã cập nhật trạng thái đơn '.$order->reference);
     }
@@ -205,6 +220,8 @@ class OrderManagementController extends Controller
             'payment_reference' => $validated['payment_reference'] ?? $order->payment_reference,
         ]);
 
+        $this->notifyAdmins($order, 'payment', 'Đã thanh toán đơn '.$order->reference);
+
         return redirect()->route('dashboard.orders')
             ->with('flash.success', 'Đã đánh dấu thanh toán đơn '.$order->reference);
     }
@@ -217,8 +234,19 @@ class OrderManagementController extends Controller
 
         $order->update(['status' => 'pending']);
 
+        $this->notifyAdmins($order, 'uncancel', 'Đã khôi phục đơn '.$order->reference);
+
         return redirect()->route('dashboard.orders')
             ->with('flash.success', 'Đã khôi phục đơn hàng '.$order->reference);
+    }
+
+    private function notifyAdmins(Order $order, string $type, string $message): void
+    {
+        $admins = User::where('role', 'admin')->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new OrderNotification($order, $type, $message));
+        }
     }
 
     public function exportXlsx(Request $request): StreamedResponse

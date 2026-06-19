@@ -80,10 +80,8 @@ export default function ProductDetail({ product }: Props) {
                         )}
 
                         {/* Pricing card */}
-                        <div className="relative overflow-hidden rounded-3xl bg-md-primary p-5 shadow-lg shadow-md-primary/20">
-                            <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-white/10" />
-                            <div className="absolute -right-2 -bottom-10 h-24 w-24 rounded-full bg-white/5" />
-                            <div className="relative mt-1 flex items-baseline gap-3">
+                        <div className="rounded-3xl bg-md-primary p-5 shadow-lg shadow-md-primary/20">
+                            <div className="flex items-baseline gap-3">
                                 <span className="text-4xl font-black text-md-on-primary">
                                     {formatVND(product.discounted_price)}
                                 </span>
